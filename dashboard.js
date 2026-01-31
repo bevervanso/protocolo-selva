@@ -300,97 +300,222 @@ function removePhoto() {
     input.value = '';
 }
 
-// Sample recipes database
-const sampleRecipes = [
-    {
-        name: "Bife de Picanha Grelhado com Legumes",
-        time: "25min",
-        calories: "520kcal",
-        protein: "48g",
-        ingredients: [
-            "300g de picanha",
-            "1 abobrinha média",
-            "1 pimentão colorido",
-            "2 colheres de azeite",
-            "Sal grosso e pimenta a gosto",
-            "Ervas frescas (alecrim, tomilho)"
-        ],
-        steps: [
-            "Retire a picanha da geladeira 30 minutos antes",
-            "Tempere a carne com sal grosso e pimenta",
-            "Corte os legumes em fatias grossas",
-            "Grelhe a picanha 4 minutos de cada lado para mal passada",
-            "Na mesma frigideira, grelhe os legumes com azeite",
-            "Finalize com ervas frescas e sirva"
-        ],
-        tip: "Para uma carne mais suculenta, deixe descansar 5 minutos antes de cortar!"
-    },
-    {
-        name: "Omelete Proteica com Espinafre",
-        time: "15min",
-        calories: "380kcal",
-        protein: "32g",
-        ingredients: [
-            "3 ovos inteiros",
-            "1 xícara de espinafre fresco",
-            "50g de queijo coalho (opcional)",
-            "1 colher de manteiga",
-            "Sal e pimenta do reino"
-        ],
-        steps: [
-            "Bata os ovos com sal e pimenta",
-            "Derreta a manteiga em frigideira antiaderente",
-            "Adicione o espinafre e refogue rapidamente",
-            "Despeje os ovos batidos por cima",
-            "Adicione o queijo no centro",
-            "Dobre a omelete e sirva"
-        ],
-        tip: "Use ovos caipiras para um sabor mais intenso e nutrientes superiores!"
-    },
-    {
-        name: "Salmão Grelhado com Abacate",
-        time: "20min",
-        calories: "480kcal",
-        protein: "42g",
-        ingredients: [
-            "200g de filé de salmão",
-            "1 abacate maduro",
-            "Suco de 1 limão",
-            "2 colheres de azeite",
-            "Sal, pimenta e endro"
-        ],
-        steps: [
-            "Tempere o salmão com sal, pimenta e limão",
-            "Grelhe em frigideira quente com azeite por 4 minutos de cada lado",
-            "Corte o abacate em fatias",
-            "Monte o prato com salmão e abacate",
-            "Finalize com endro fresco e azeite"
-        ],
-        tip: "O salmão é rico em ômega-3, essencial para saúde cardiovascular e cerebral!"
-    },
-    {
-        name: "Frango ao Curry com Coco",
-        time: "35min",
-        calories: "420kcal",
-        protein: "45g",
-        ingredients: [
-            "400g de peito de frango em cubos",
-            "200ml de leite de coco",
-            "2 colheres de curry em pó",
-            "1 cebola picada",
-            "2 dentes de alho",
-            "Coentro fresco"
-        ],
-        steps: [
-            "Tempere o frango com curry, sal e pimenta",
-            "Refogue a cebola e o alho no azeite",
-            "Adicione o frango e doure bem",
-            "Acrescente o leite de coco e cozinhe por 15 minutos",
-            "Finalize com coentro fresco"
-        ],
-        tip: "O leite de coco contém gorduras MCT que são rapidamente convertidas em energia!"
+// Receitas de exemplo organizadas por tipo de refeição - DIETA DA SELVA
+const sampleRecipesByMeal = {
+    cafe_da_manha: [
+        {
+            name: "Ovos Mexidos com Bacon e Queijo",
+            time: "15min",
+            calories: "450kcal",
+            protein: "28g",
+            mealType: "cafe_da_manha",
+            mealTypeName: "Café da Manhã",
+            ingredients: [
+                "3 ovos caipiras",
+                "4 fatias de bacon",
+                "50g de queijo minas",
+                "1 colher de manteiga",
+                "Sal e pimenta a gosto"
+            ],
+            steps: [
+                "Frite o bacon em frigideira até ficar crocante",
+                "Bata os ovos com sal e pimenta",
+                "Na gordura do bacon, adicione a manteiga",
+                "Despeje os ovos e mexa delicadamente",
+                "Adicione queijo e bacon picado",
+                "Sirva quando os ovos estiverem cremosos"
+            ],
+            tip: "Os ovos caipiras são mais nutritivos e ricos em ômega-3!"
+        },
+        {
+            name: "Iogurte Natural com Frutas e Mel",
+            time: "5min",
+            calories: "280kcal",
+            protein: "15g",
+            mealType: "cafe_da_manha",
+            mealTypeName: "Café da Manhã",
+            ingredients: [
+                "200g de iogurte natural integral",
+                "1/2 banana madura",
+                "5 morangos frescos",
+                "1 colher de mel puro",
+                "Canela em pó a gosto"
+            ],
+            steps: [
+                "Coloque o iogurte em uma tigela",
+                "Corte as frutas em pedaços",
+                "Disponha as frutas sobre o iogurte",
+                "Regue com mel puro de abelha",
+                "Finalize com canela em pó"
+            ],
+            tip: "O mel é o único adoçante permitido na Dieta da Selva - use com moderação!"
+        }
+    ],
+    almoco: [
+        {
+            name: "Bife de Picanha Grelhado na Manteiga",
+            time: "20min",
+            calories: "580kcal",
+            protein: "52g",
+            mealType: "almoco",
+            mealTypeName: "Almoço",
+            ingredients: [
+                "300g de picanha",
+                "2 colheres de manteiga",
+                "Sal grosso a gosto",
+                "Pimenta do reino moída",
+                "Alho picado (opcional)"
+            ],
+            steps: [
+                "Retire a carne da geladeira 30 min antes",
+                "Tempere generosamente com sal grosso",
+                "Aqueça a frigideira com manteiga",
+                "Grelhe 4-5 min de cada lado (ao ponto)",
+                "Adicione mais manteiga e alho no final",
+                "Deixe descansar 5 min antes de cortar"
+            ],
+            tip: "A gordura da picanha é saudável e saborosa - não retire!"
+        },
+        {
+            name: "Frango Assado com Ervas",
+            time: "45min",
+            calories: "420kcal",
+            protein: "48g",
+            mealType: "almoco",
+            mealTypeName: "Almoço",
+            ingredients: [
+                "2 sobrecoxas de frango com pele",
+                "2 colheres de manteiga derretida",
+                "Alecrim e tomilho frescos",
+                "4 dentes de alho",
+                "Sal e pimenta a gosto"
+            ],
+            steps: [
+                "Tempere o frango com sal, pimenta e ervas",
+                "Espalhe manteiga por toda a pele",
+                "Disponha os alhos ao redor",
+                "Asse a 200°C por 40 minutos",
+                "Regue com o molho algumas vezes",
+                "Sirva com a pele crocante"
+            ],
+            tip: "A pele do frango é rica em colágeno - não descarte!"
+        }
+    ],
+    lanche: [
+        {
+            name: "Queijo com Frutas e Mel",
+            time: "5min",
+            calories: "320kcal",
+            protein: "18g",
+            mealType: "lanche",
+            mealTypeName: "Lanche da Tarde",
+            ingredients: [
+                "100g de queijo coalho ou minas",
+                "1 maçã pequena fatiada",
+                "1 colher de mel",
+                "Canela em pó"
+            ],
+            steps: [
+                "Corte o queijo em cubos ou fatias",
+                "Fatie a maçã em lâminas finas",
+                "Disponha alternando queijo e maçã",
+                "Regue com mel",
+                "Polvilhe canela por cima"
+            ],
+            tip: "Combinação perfeita de proteína, gordura e doce natural!"
+        },
+        {
+            name: "Ovos Cozidos com Manteiga",
+            time: "12min",
+            calories: "220kcal",
+            protein: "14g",
+            mealType: "lanche",
+            mealTypeName: "Lanche da Tarde",
+            ingredients: [
+                "2 ovos caipiras",
+                "1 colher de manteiga",
+                "Sal e pimenta a gosto",
+                "Ervas finas (opcional)"
+            ],
+            steps: [
+                "Cozinhe os ovos por 8-10 minutos",
+                "Coloque em água gelada",
+                "Descasque e corte ao meio",
+                "Adicione uma noz de manteiga em cada",
+                "Tempere com sal e pimenta"
+            ],
+            tip: "Ovos são o alimento mais completo da natureza!"
+        }
+    ],
+    jantar: [
+        {
+            name: "Omelete Recheada de Queijo",
+            time: "15min",
+            calories: "420kcal",
+            protein: "32g",
+            mealType: "jantar",
+            mealTypeName: "Jantar",
+            ingredients: [
+                "3 ovos",
+                "60g de queijo muçarela",
+                "1 colher de manteiga",
+                "Sal e pimenta a gosto",
+                "Orégano a gosto"
+            ],
+            steps: [
+                "Bata os ovos com sal e pimenta",
+                "Derreta a manteiga em frigideira média",
+                "Despeje os ovos e deixe cozinhar",
+                "Quando firmar embaixo, adicione queijo",
+                "Dobre ao meio",
+                "Sirva com orégano por cima"
+            ],
+            tip: "Jantar leve e proteico - ideal para boa noite de sono!"
+        },
+        {
+            name: "Salmão Grelhado com Limão",
+            time: "18min",
+            calories: "380kcal",
+            protein: "42g",
+            mealType: "jantar",
+            mealTypeName: "Jantar",
+            ingredients: [
+                "200g de filé de salmão",
+                "Suco de 1 limão",
+                "2 colheres de manteiga",
+                "Sal e pimenta a gosto",
+                "Endro fresco"
+            ],
+            steps: [
+                "Tempere o salmão com sal e limão",
+                "Aqueça a frigideira com manteiga",
+                "Grelhe 4 minutos de cada lado",
+                "Adicione mais manteiga derretida",
+                "Finalize com endro fresco"
+            ],
+            tip: "Salmão é rico em ômega-3 - excelente para o cérebro!"
+        }
+    ]
+};
+
+// Função para pegar receita baseada no horário
+function getSampleRecipeByTime() {
+    const hour = new Date().getHours();
+    let mealType;
+
+    if (hour >= 5 && hour < 10) {
+        mealType = 'cafe_da_manha';
+    } else if (hour >= 10 && hour < 14) {
+        mealType = 'almoco';
+    } else if (hour >= 14 && hour < 18) {
+        mealType = 'lanche';
+    } else {
+        mealType = 'jantar';
     }
-];
+
+    const recipes = sampleRecipesByMeal[mealType];
+    return recipes[Math.floor(Math.random() * recipes.length)];
+}
 
 let currentRecipe = null;
 
@@ -441,9 +566,9 @@ async function generateRecipe() {
             throw new Error('Sem ingredientes ou API não disponível');
         }
     } catch (error) {
-        // Fallback para receitas estáticas
+        // Fallback para receitas estáticas baseadas no horário
         console.log('Usando receitas offline:', error.message);
-        currentRecipe = sampleRecipes[Math.floor(Math.random() * sampleRecipes.length)];
+        currentRecipe = getSampleRecipeByTime();
     }
 
     // Update UI
