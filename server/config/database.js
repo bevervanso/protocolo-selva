@@ -30,9 +30,13 @@ if (existsSync(dbPath)) {
 
 // Função para salvar o banco no disco
 export function saveDatabase() {
-  const data = db.export();
-  const buffer = Buffer.from(data);
-  writeFileSync(dbPath, buffer);
+  try {
+    const data = db.export();
+    const buffer = Buffer.from(data);
+    writeFileSync(dbPath, buffer);
+  } catch (e) {
+    console.error('❌ Falha ao salvar banco de dados (esperado em alguns ambientes):', e.message);
+  }
 }
 
 // Salvar automaticamente a cada 30 segundos

@@ -9,6 +9,7 @@ const router = express.Router();
 // ============================================
 router.get('/users', authenticateToken, isAdmin, (req, res) => {
     try {
+        console.log('Admin Panel: Fetching users...');
         const users = db.prepare(`
             SELECT u.id, u.name, u.email, u.role, u.created_at,
                    p.weight, p.height, p.goal, p.quiz_completed
@@ -16,6 +17,7 @@ router.get('/users', authenticateToken, isAdmin, (req, res) => {
             LEFT JOIN profiles p ON u.id = p.user_id
             ORDER BY u.created_at DESC
         `).all();
+        console.log(`Admin Panel: Found ${users.length} users`);
 
         res.json({
             success: true,

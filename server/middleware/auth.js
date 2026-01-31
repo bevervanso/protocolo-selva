@@ -32,7 +32,9 @@ export const isAdmin = (req, res, next) => {
     }
 
     try {
+        console.log(`Admin Check: Verifying user ID ${req.user.userId}`);
         const user = db.prepare('SELECT role FROM users WHERE id = ?').get(req.user.userId);
+        console.log(`Admin Check: User role is ${user ? user.role : 'not found'}`);
 
         if (user && user.role === 'admin') {
             next();

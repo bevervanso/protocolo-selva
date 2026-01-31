@@ -41,7 +41,18 @@ async function apiRequest(endpoint, options = {}) {
 
     try {
         const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
-        const data = await response.json();
+
+        // Verificar se a resposta é JSON
+        const contentType = response.headers.get('content-type');
+        let data;
+
+        if (contentType && contentType.includes('application/json')) {
+            data = await response.json();
+        } else {
+            const text = await response.text();
+            console.error('Resposta não-JSON recebida:', text);
+            throw new Error('O servidor retornou um erro inesperado. Por favor, tente novamente mais tarde.');
+        }
 
         if (!response.ok) {
             // Se token expirou, fazer logout
