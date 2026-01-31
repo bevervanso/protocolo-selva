@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import db from '../config/database.js';
 
 export const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
@@ -30,10 +31,7 @@ export const isAdmin = (req, res, next) => {
         return res.status(401).json({ success: false, message: 'Usuário não autenticado' });
     }
 
-    // Importar DB dinamicamente para evitar circular dependency se necessário
-    // Mas aqui estamos no middleware, deve ser ok
-    import('../config/database.js').then(module => {
-        const db = module.default;
+    try {
         const user = db.prepare('SELECT role FROM users WHERE id = ?').get(req.user.userId);
 
         if (user && user.role === 'admin') {
@@ -44,10 +42,10 @@ export const isAdmin = (req, res, next) => {
                 message: 'Acesso negado. Requer privilégios de administrador.'
             });
         }
-    }).catch(err => {
+    } catch (err) {
         console.error('Admin check error:', err);
         res.status(500).json({ success: false, message: 'Erro ao verificar privilégios' });
-    });
+    }
 };
 
 export const generateToken = (userId) => {
