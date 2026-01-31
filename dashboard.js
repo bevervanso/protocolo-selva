@@ -178,6 +178,9 @@ function loadDashboardData() {
 
     // Load progress data
     loadProgressData(user);
+
+    // Load personalized suggestions based on quiz
+    loadPersonalizedSuggestions(user);
 }
 
 function calculateStreak(user) {
@@ -544,8 +547,12 @@ async function generateRecipe() {
             try {
                 if (typeof RecipesAPI !== 'undefined') {
                     const analysis = await RecipesAPI.analyzeImage(previewImage.src);
-                    if (analysis.success) {
-                        ingredients = analysis.ingredients;
+                    if (analysis.success && analysis.ingredients) {
+                        // Combinar ingredientes do texto com os da imagem
+                        ingredients = ingredientText
+                            ? `${ingredientText}, ${analysis.ingredients}`
+                            : analysis.ingredients;
+                        console.log('Ingredientes combinados:', ingredients);
                     }
                 }
             } catch (e) {
@@ -951,6 +958,70 @@ function loadProgressData(user) {
     renderWeightChart(progress);
 }
 
+function loadPersonalizedSuggestions(user) {
+    const container = document.getElementById('personalizedSuggestions');
+    if (!container) return;
+
+    const quizProfile = getUserProfile();
+    const goal = quizProfile?.goal || user.profile?.goal || 'lose_weight';
+    const proteins = quizProfile?.favoriteProteins || [];
+    const restrictions = quizProfile?.restrictions || [];
+
+    // Base de sugestões por objetivo
+    const allSuggestions = {
+        'lose_weight': [
+            { name: "Omelete de Ervas com Queijo", type: "Manhã", icon: "🍳" },
+            { name: "Peito de Frango Grelhado com Brócolis", type: "Almoço", icon: "🍗" },
+            { name: "Filé de Peixe ao Forno com Azeite", type: "Jantar", icon: "🐟" }
+        ],
+        'gain_muscle': [
+            { name: "Ovos Mexidos com Bacon e Queijo", type: "Manhã", icon: "🥓" },
+            { name: "Picanha na Manteiga com Ovos Fritos", type: "Almoço", icon: "🥩" },
+            { name: "Sobrecoxa de Frango Assada", type: "Jantar", icon: "🍗" }
+        ],
+        'health': [
+            { name: "Iogurte Natural com Frutas e Mel", type: "Manhã", icon: "🍯" },
+            { name: "Salmão Grelhado com Aspargos", type: "Almoço", icon: "🐟" },
+            { name: "Mix de Queijos e Oleaginosas", type: "Lanche", icon: "🧀" }
+        ],
+        'energy': [
+            { name: "Ovos Poché com Abacate", type: "Manhã", icon: "🥑" },
+            { name: "Bife de Fígado com Cebola", type: "Almoço", icon: "🥩" },
+            { name: "Caldo de Carne com Legumes Selva", type: "Jantar", icon: "🥣" }
+        ]
+    };
+
+    let suggestions = allSuggestions[goal] || allSuggestions['lose_weight'];
+
+    // Filtragem simples por proteínas e restrições
+    if (proteins.length > 0) {
+        // Tentar sugerir algo com a proteína favorita se disponível
+        // (Isso é apenas um exemplo, em um sistema real faríamos um matching melhor)
+    }
+
+    container.innerHTML = suggestions.map(s => `
+        <div class="suggestion-item">
+            <span class="suggestion-icon">${s.icon}</span>
+            <div class="suggestion-info">
+                <span class="suggestion-name">${s.name}</span>
+                <span class="suggestion-tag">${s.type}</span>
+            </div>
+            <button class="btn-icon" title="Gerar receita similar" onclick="quickGenerate('${s.name}')">🪄</button>
+        </div>
+    `).join('');
+}
+
+function quickGenerate(recipeName) {
+    switchSection('recipes');
+    const input = document.getElementById('ingredientText');
+    if (input) {
+        const methodTab = document.querySelector('.method-tab[data-method="text"]');
+        if (methodTab) methodTab.click();
+        input.value = `Gostaria de uma receita similar a: ${recipeName}`;
+        showToast(`Carregando sugestão: ${recipeName} ✨`);
+    }
+}
+
 function renderProgressHistory(progress) {
     const container = document.getElementById('progressHistory');
     if (!container) return;
@@ -1052,15 +1123,30 @@ function renderWeightChart(progress) {
 // PROFILE MANAGEMENT
 // ============================================
 function loadProfileForm(user) {
+    // Obter dados do quiz de onboarding se existirem
+    const quizProfile = getUserProfile();
+
     // Suporta tanto formato da API (profile separado) quanto localStorage
     const profile = user.profile || user;
 
     document.getElementById('profileNameInput').value = user.name || '';
     document.getElementById('profileEmailInput').value = user.email || '';
-    document.getElementById('profileWeight').value = profile?.weight || '';
-    document.getElementById('profileHeight').value = profile?.height || '';
-    document.getElementById('profileGoal').value = profile?.goal || 'lose';
-    document.getElementById('profileGoalWeight').value = profile?.goalWeight || profile?.goal_weight || '';
+
+    // Preferir dados do quiz se existirem, fallback para perfil antigo
+    document.getElementById('profileWeight').value = quizProfile?.weight || profile?.weight || '';
+    document.getElementById('profileHeight').value = quizProfile?.height || profile?.height || '';
+
+    // Mapear objetivos se necessário
+    const goalMap = {
+        'lose_weight': 'lose',
+        'gain_muscle': 'gain',
+        'health': 'maintain',
+        'energy': 'maintain'
+    };
+    const currentGoal = quizProfile?.goal || profile?.goal || 'lose';
+    document.getElementById('profileGoal').value = goalMap[currentGoal] || currentGoal;
+
+    document.getElementById('profileGoalWeight').value = quizProfile?.goalWeight || profile?.goalWeight || profile?.goal_weight || '';
 }
 
 function saveProfile(event) {
@@ -1068,15 +1154,37 @@ function saveProfile(event) {
 
     const appData = getAppData();
     const user = appData.users.find(u => u.id === appData.currentUser);
+    const userId = user.id || user.email;
 
     user.name = document.getElementById('profileNameInput').value;
     user.email = document.getElementById('profileEmailInput').value;
 
+    const weight = parseFloat(document.getElementById('profileWeight').value) || null;
+    const height = parseInt(document.getElementById('profileHeight').value) || null;
+    const goal = document.getElementById('profileGoal').value;
+    const goalWeight = parseFloat(document.getElementById('profileGoalWeight').value) || null;
+
     if (!user.profile) user.profile = {};
-    user.profile.weight = parseFloat(document.getElementById('profileWeight').value) || null;
-    user.profile.height = parseInt(document.getElementById('profileHeight').value) || null;
-    user.profile.goal = document.getElementById('profileGoal').value;
-    user.profile.goalWeight = parseFloat(document.getElementById('profileGoalWeight').value) || null;
+    user.profile.weight = weight;
+    user.profile.height = height;
+    user.profile.goal = goal;
+    user.profile.goalWeight = goalWeight;
+
+    // Sincronizar com dados do Quiz (userProfiles)
+    if (!appData.userProfiles) appData.userProfiles = {};
+    if (!appData.userProfiles[userId]) appData.userProfiles[userId] = {};
+
+    appData.userProfiles[userId].weight = weight;
+    appData.userProfiles[userId].height = height;
+    appData.userProfiles[userId].goalWeight = goalWeight;
+
+    // Mapear objetivo de volta
+    const reverseGoalMap = {
+        'lose': 'lose_weight',
+        'gain': 'gain_muscle',
+        'maintain': 'health'
+    };
+    appData.userProfiles[userId].goal = reverseGoalMap[goal] || goal;
 
     saveAppData(appData);
     checkDashboardAuth(); // Refresh UI

@@ -1935,3 +1935,77 @@ body {
         font-size: 1.3rem;
     }
 }
+
+/* Personalized Suggestions Dashboard Card */
+.suggestions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--bg-dark);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.suggestion-item:hover {
+    transform: translateX(5px);
+    border-color: var(--primary);
+}
+
+.suggestion-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(27, 94, 32, 0.1);
+    border-radius: var(--radius-sm);
+}
+
+.suggestion-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.suggestion-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.suggestion-tag {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.loading-placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 0.9rem;
+    padding: 10px;
+    text-align: center;
+}
+
+.btn-icon {
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: var(--radius-sm);
+    transition: background 0.2s;
+}
+
+.btn-icon:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
