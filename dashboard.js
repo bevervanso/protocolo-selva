@@ -65,6 +65,13 @@ async function checkDashboardAuth() {
 
     // Load profile form
     loadProfileForm(user);
+
+    // Verificar se o quiz de onboarding foi completado
+    const userProfile = getUserProfile();
+    if (!userProfile || !userProfile.quizCompleted) {
+        // Mostrar quiz de onboarding
+        setTimeout(() => showQuizModal(), 500);
+    }
 }
 
 // Função auxiliar para obter usuário (API ou localStorage)
@@ -1042,4 +1049,353 @@ function formatDateLong(dateStr) {
         month: 'short',
         year: 'numeric'
     });
+}
+
+// ============================================
+// QUIZ ONBOARDING
+// ============================================
+let currentQuizStep = 1;
+const totalQuizSteps = 6;
+let quizData = {};
+
+// Obter perfil do usuário
+function getUserProfile() {
+    const user = getDashboardUser();
+    if (!user) return null;
+
+    const appData = getAppData();
+    if (!appData.userProfiles) appData.userProfiles = {};
+
+    const userId = user.id || user.email;
+    return appData.userProfiles[userId] || null;
+}
+
+// Salvar perfil do usuário
+function saveUserProfile(profile) {
+    const user = getDashboardUser();
+    if (!user) return;
+
+    const appData = getAppData();
+    if (!appData.userProfiles) appData.userProfiles = {};
+
+    const userId = user.id || user.email;
+    appData.userProfiles[userId] = profile;
+    saveAppData(appData);
+}
+
+// Mostrar modal do quiz
+function showQuizModal() {
+    const modal = document.getElementById('quizModal');
+    if (modal) {
+        modal.classList.add('active');
+        currentQuizStep = 1;
+        quizData = {};
+        updateQuizUI();
+    }
+}
+
+// Esconder modal do quiz
+function hideQuizModal() {
+    const modal = document.getElementById('quizModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+// Atualizar UI do quiz
+function updateQuizUI() {
+    // Atualizar steps visíveis
+    document.querySelectorAll('.quiz-step').forEach(step => {
+        step.classList.remove('active');
+    });
+
+    const currentStep = document.querySelector(`.quiz-step[data-step="${currentQuizStep}"]`);
+    if (currentStep) {
+        currentStep.classList.add('active');
+    }
+
+    // Atualizar barra de progresso
+    const progress = (currentQuizStep / totalQuizSteps) * 100;
+    const progressBar = document.getElementById('quizProgress');
+    const progressText = document.getElementById('quizProgressText');
+
+    if (progressBar) progressBar.style.width = `${progress}%`;
+    if (progressText) {
+        if (currentQuizStep <= totalQuizSteps) {
+            progressText.textContent = `Pergunta ${currentQuizStep} de ${totalQuizSteps}`;
+        } else {
+            progressText.textContent = 'Concluído!';
+        }
+    }
+
+    // Atualizar botões
+    const prevBtn = document.getElementById('quizPrevBtn');
+    const nextBtn = document.getElementById('quizNextBtn');
+    const footer = document.getElementById('quizFooter');
+
+    if (prevBtn) {
+        prevBtn.style.display = currentQuizStep > 1 && currentQuizStep <= totalQuizSteps ? 'block' : 'none';
+    }
+
+    if (nextBtn) {
+        if (currentQuizStep === totalQuizSteps) {
+            nextBtn.textContent = 'Ver Resultado →';
+        } else if (currentQuizStep > totalQuizSteps) {
+            // Esconder footer na tela de resultado
+            if (footer) footer.style.display = 'none';
+        } else {
+            nextBtn.textContent = 'Próximo →';
+        }
+    }
+}
+
+// Próximo passo do quiz
+function nextQuizStep() {
+    // Validar e coletar dados do passo atual
+    if (!validateAndCollectQuizStep()) {
+        return;
+    }
+
+    currentQuizStep++;
+
+    if (currentQuizStep > totalQuizSteps) {
+        // Mostrar resultado
+        showQuizResult();
+    }
+
+    updateQuizUI();
+}
+
+// Passo anterior do quiz
+function prevQuizStep() {
+    if (currentQuizStep > 1) {
+        currentQuizStep--;
+        updateQuizUI();
+    }
+}
+
+// Validar e coletar dados do passo
+function validateAndCollectQuizStep() {
+    switch (currentQuizStep) {
+        case 1: // Objetivo
+            const goal = document.querySelector('input[name="goal"]:checked');
+            if (!goal) {
+                showToast('Por favor, selecione seu objetivo', 'error');
+                return false;
+            }
+            quizData.goal = goal.value;
+            break;
+
+        case 2: // Experiência
+            const experience = document.querySelector('input[name="experience"]:checked');
+            if (!experience) {
+                showToast('Por favor, selecione sua experiência', 'error');
+                return false;
+            }
+            quizData.experience = experience.value;
+            break;
+
+        case 3: // Peso
+            const weight = document.getElementById('quizWeight')?.value;
+            const goalWeight = document.getElementById('quizGoalWeight')?.value;
+            const height = document.getElementById('quizHeight')?.value;
+
+            if (!weight) {
+                showToast('Por favor, informe seu peso atual', 'error');
+                return false;
+            }
+
+            quizData.weight = parseFloat(weight);
+            quizData.goalWeight = goalWeight ? parseFloat(goalWeight) : null;
+            quizData.height = height ? parseInt(height) : null;
+            break;
+
+        case 4: // Proteínas favoritas
+            const proteins = document.querySelectorAll('input[name="proteins"]:checked');
+            quizData.favoriteProteins = Array.from(proteins).map(p => p.value);
+            break;
+
+        case 5: // Restrições
+            const restrictions = document.querySelectorAll('input[name="restrictions"]:checked');
+            quizData.restrictions = Array.from(restrictions).map(r => r.value);
+            break;
+
+        case 6: // Rotina
+            const routine = document.querySelector('input[name="routine"]:checked');
+            if (!routine) {
+                showToast('Por favor, selecione sua rotina', 'error');
+                return false;
+            }
+            quizData.routine = routine.value;
+            break;
+    }
+
+    return true;
+}
+
+// Mostrar resultado do quiz
+function showQuizResult() {
+    // Calcular perfil com base nas respostas
+    const profile = calculateProfile();
+
+    // Renderizar resumo
+    const summaryContainer = document.getElementById('profileSummary');
+    if (summaryContainer) {
+        summaryContainer.innerHTML = `
+            <div class="summary-item">
+                <span class="summary-icon">🎯</span>
+                <div>
+                    <div class="summary-label">Seu Objetivo</div>
+                    <div class="summary-value">${profile.goalText}</div>
+                </div>
+            </div>
+            <div class="summary-item">
+                <span class="summary-icon">📊</span>
+                <div>
+                    <div class="summary-label">Nível</div>
+                    <div class="summary-value">${profile.levelText}</div>
+                </div>
+            </div>
+            <div class="summary-item">
+                <span class="summary-icon">⚖️</span>
+                <div>
+                    <div class="summary-label">Meta de Peso</div>
+                    <div class="summary-value">${profile.weightGoalText}</div>
+                </div>
+            </div>
+            <div class="summary-item">
+                <span class="summary-icon">🍽️</span>
+                <div>
+                    <div class="summary-label">Rotina</div>
+                    <div class="summary-value">${profile.routineText}</div>
+                </div>
+            </div>
+            <div class="summary-item">
+                <span class="summary-icon">🥩</span>
+                <div>
+                    <div class="summary-label">Proteínas Favoritas</div>
+                    <div class="summary-value">${profile.proteinsText}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Esconder header de progresso
+    const quizHeader = document.querySelector('.quiz-header');
+    if (quizHeader) {
+        quizHeader.innerHTML = `
+            <span class="quiz-icon">✨</span>
+            <h2>Perfil Configurado!</h2>
+            <p>Sua experiência foi personalizada com base nas suas respostas</p>
+        `;
+    }
+
+    // Mostrar step de resultado
+    document.querySelectorAll('.quiz-step').forEach(step => {
+        step.classList.remove('active');
+    });
+    const resultStep = document.querySelector('.quiz-step[data-step="result"]');
+    if (resultStep) {
+        resultStep.classList.add('active');
+    }
+}
+
+// Calcular perfil com base nas respostas
+function calculateProfile() {
+    const goalTexts = {
+        'lose_weight': 'Perder peso',
+        'gain_muscle': 'Ganhar massa muscular',
+        'health': 'Melhorar a saúde',
+        'energy': 'Mais energia e disposição'
+    };
+
+    const experienceTexts = {
+        'beginner': '🌱 Iniciante',
+        'intermediate': '🌿 Intermediário',
+        'advanced': '🌳 Avançado'
+    };
+
+    const routineTexts = {
+        'regular': 'Horários regulares',
+        'flexible': 'Flexível',
+        'intermittent': 'Jejum intermitente',
+        'frequent': 'Várias refeições ao dia'
+    };
+
+    const proteinNames = {
+        'beef': 'Carne bovina',
+        'chicken': 'Frango',
+        'pork': 'Porco/Bacon',
+        'fish': 'Peixes',
+        'eggs': 'Ovos',
+        'cheese': 'Queijos'
+    };
+
+    // Calcular meta de peso
+    let weightGoalText = 'Não definido';
+    if (quizData.weight && quizData.goalWeight) {
+        const diff = quizData.weight - quizData.goalWeight;
+        if (diff > 0) {
+            weightGoalText = `${quizData.weight}kg → ${quizData.goalWeight}kg (-${diff.toFixed(1)}kg)`;
+        } else if (diff < 0) {
+            weightGoalText = `${quizData.weight}kg → ${quizData.goalWeight}kg (+${Math.abs(diff).toFixed(1)}kg)`;
+        } else {
+            weightGoalText = `Manter ${quizData.weight}kg`;
+        }
+    } else if (quizData.weight) {
+        weightGoalText = `Peso atual: ${quizData.weight}kg`;
+    }
+
+    // Proteínas favoritas
+    const proteinsText = quizData.favoriteProteins && quizData.favoriteProteins.length > 0
+        ? quizData.favoriteProteins.map(p => proteinNames[p] || p).join(', ')
+        : 'Todas as proteínas';
+
+    return {
+        goalText: goalTexts[quizData.goal] || 'Não definido',
+        levelText: experienceTexts[quizData.experience] || 'Não definido',
+        weightGoalText,
+        routineText: routineTexts[quizData.routine] || 'Não definido',
+        proteinsText
+    };
+}
+
+// Completar quiz e salvar perfil
+function completeQuiz() {
+    // Montar perfil completo
+    const profile = {
+        quizCompleted: true,
+        completedAt: new Date().toISOString(),
+        goal: quizData.goal,
+        experience: quizData.experience,
+        weight: quizData.weight,
+        goalWeight: quizData.goalWeight,
+        height: quizData.height,
+        favoriteProteins: quizData.favoriteProteins || [],
+        restrictions: quizData.restrictions || [],
+        routine: quizData.routine
+    };
+
+    // Salvar perfil
+    saveUserProfile(profile);
+
+    // Atualizar dados do usuário no localStorage também
+    const user = getDashboardUser();
+    if (user) {
+        const appData = getAppData();
+        const userIndex = appData.users?.findIndex(u => u.id === user.id || u.email === user.email);
+        if (userIndex !== undefined && userIndex >= 0 && appData.users[userIndex]) {
+            appData.users[userIndex].profile = profile;
+            saveAppData(appData);
+        }
+    }
+
+    // Fechar modal
+    hideQuizModal();
+
+    // Atualizar dashboard
+    loadDashboardData();
+
+    // Mostrar mensagem de sucesso
+    showToast('Perfil configurado com sucesso! Bem-vindo ao Protocolo Selva! 🌿');
 }

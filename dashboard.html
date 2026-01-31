@@ -514,6 +514,248 @@
         </div>
     </div>
 
+    <!-- Quiz Onboarding Modal -->
+    <div class="modal quiz-modal" id="quizModal">
+        <div class="modal-content quiz-content">
+            <div class="quiz-header">
+                <span class="quiz-icon">🌿</span>
+                <h2>Bem-vindo ao Protocolo Selva!</h2>
+                <p>Responda algumas perguntas para personalizar sua experiência</p>
+                <div class="quiz-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="quizProgress" style="width: 0%"></div>
+                    </div>
+                    <span class="progress-text" id="quizProgressText">Pergunta 1 de 6</span>
+                </div>
+            </div>
+
+            <div class="quiz-body">
+                <!-- Pergunta 1: Objetivo -->
+                <div class="quiz-step active" data-step="1">
+                    <h3>🎯 Qual é seu principal objetivo?</h3>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="goal" value="lose_weight">
+                            <span class="option-content">
+                                <span class="option-icon">⬇️</span>
+                                <span class="option-text">Perder peso</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="goal" value="gain_muscle">
+                            <span class="option-content">
+                                <span class="option-icon">💪</span>
+                                <span class="option-text">Ganhar massa muscular</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="goal" value="health">
+                            <span class="option-content">
+                                <span class="option-icon">❤️</span>
+                                <span class="option-text">Melhorar a saúde</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="goal" value="energy">
+                            <span class="option-content">
+                                <span class="option-icon">⚡</span>
+                                <span class="option-text">Mais energia e disposição</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 2: Experiência -->
+                <div class="quiz-step" data-step="2">
+                    <h3>📚 Qual sua experiência com dietas low-carb?</h3>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="experience" value="beginner">
+                            <span class="option-content">
+                                <span class="option-icon">🌱</span>
+                                <span class="option-text">Iniciante - Nunca fiz</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="experience" value="intermediate">
+                            <span class="option-content">
+                                <span class="option-icon">🌿</span>
+                                <span class="option-text">Intermediário - Já tentei algumas vezes</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="experience" value="advanced">
+                            <span class="option-content">
+                                <span class="option-icon">🌳</span>
+                                <span class="option-text">Avançado - Pratico há bastante tempo</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 3: Peso e Meta -->
+                <div class="quiz-step" data-step="3">
+                    <h3>⚖️ Conte-nos sobre seu peso</h3>
+                    <div class="quiz-inputs">
+                        <div class="input-group">
+                            <label for="quizWeight">Peso atual (kg)</label>
+                            <input type="number" id="quizWeight" placeholder="Ex: 75" step="0.1" min="30" max="300">
+                        </div>
+                        <div class="input-group">
+                            <label for="quizGoalWeight">Peso desejado (kg)</label>
+                            <input type="number" id="quizGoalWeight" placeholder="Ex: 68" step="0.1" min="30" max="300">
+                        </div>
+                        <div class="input-group">
+                            <label for="quizHeight">Altura (cm)</label>
+                            <input type="number" id="quizHeight" placeholder="Ex: 170" min="100" max="250">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pergunta 4: Preferências Alimentares -->
+                <div class="quiz-step" data-step="4">
+                    <h3>🥩 Quais suas proteínas favoritas?</h3>
+                    <p class="quiz-subtitle">Selecione todas que você gosta</p>
+                    <div class="quiz-options multi">
+                        <label class="quiz-option">
+                            <input type="checkbox" name="proteins" value="beef">
+                            <span class="option-content">
+                                <span class="option-icon">🥩</span>
+                                <span class="option-text">Carne bovina</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="proteins" value="chicken">
+                            <span class="option-content">
+                                <span class="option-icon">🍗</span>
+                                <span class="option-text">Frango</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="proteins" value="pork">
+                            <span class="option-content">
+                                <span class="option-icon">🥓</span>
+                                <span class="option-text">Porco/Bacon</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="proteins" value="fish">
+                            <span class="option-content">
+                                <span class="option-icon">🐟</span>
+                                <span class="option-text">Peixes</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="proteins" value="eggs">
+                            <span class="option-content">
+                                <span class="option-icon">🥚</span>
+                                <span class="option-text">Ovos</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="proteins" value="cheese">
+                            <span class="option-content">
+                                <span class="option-icon">🧀</span>
+                                <span class="option-text">Queijos</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 5: Restrições -->
+                <div class="quiz-step" data-step="5">
+                    <h3>⚠️ Possui alguma restrição alimentar?</h3>
+                    <div class="quiz-options multi">
+                        <label class="quiz-option">
+                            <input type="checkbox" name="restrictions" value="none">
+                            <span class="option-content">
+                                <span class="option-icon">✅</span>
+                                <span class="option-text">Nenhuma restrição</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="restrictions" value="lactose">
+                            <span class="option-content">
+                                <span class="option-icon">🥛</span>
+                                <span class="option-text">Intolerância à lactose</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="restrictions" value="seafood">
+                            <span class="option-content">
+                                <span class="option-icon">🦐</span>
+                                <span class="option-text">Alergia a frutos do mar</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="restrictions" value="pork">
+                            <span class="option-content">
+                                <span class="option-icon">🐷</span>
+                                <span class="option-text">Não como carne de porco</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 6: Rotina -->
+                <div class="quiz-step" data-step="6">
+                    <h3>⏰ Como é sua rotina de refeições?</h3>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="routine" value="regular">
+                            <span class="option-content">
+                                <span class="option-icon">🕐</span>
+                                <span class="option-text">Horários regulares (café, almoço, jantar)</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="routine" value="flexible">
+                            <span class="option-content">
+                                <span class="option-icon">🔄</span>
+                                <span class="option-text">Flexível - como quando tenho fome</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="routine" value="intermittent">
+                            <span class="option-content">
+                                <span class="option-icon">⏳</span>
+                                <span class="option-text">Pratico jejum intermitente</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="routine" value="frequent">
+                            <span class="option-content">
+                                <span class="option-icon">🍽️</span>
+                                <span class="option-text">Várias refeições pequenas ao dia</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Resultado do Quiz -->
+                <div class="quiz-step quiz-result" data-step="result">
+                    <div class="result-icon">🎉</div>
+                    <h3>Perfil Configurado!</h3>
+                    <div class="profile-summary" id="profileSummary">
+                        <!-- Preenchido via JavaScript -->
+                    </div>
+                    <button class="btn-primary btn-full" onclick="completeQuiz()">
+                        Começar a Jornada! 🚀
+                    </button>
+                </div>
+            </div>
+
+            <div class="quiz-footer" id="quizFooter">
+                <button class="btn-ghost" onclick="prevQuizStep()" id="quizPrevBtn" style="display: none;">
+                    ← Voltar
+                </button>
+                <button class="btn-primary" onclick="nextQuizStep()" id="quizNextBtn">
+                    Próximo →
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast -->
     <div class="toast" id="toast">
         <span class="toast-icon">✓</span>
