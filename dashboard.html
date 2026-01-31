@@ -448,58 +448,60 @@
                         </button>
                     </form>
                 </div>
-                <!-- Admin Section -->
-                <section class="section" id="section-admin">
-                    <div class="admin-container">
-                        <div class="admin-header">
-                            <h2>🔐 Painel Administrativo</h2>
-                            <p>Gestão de usuários e estatísticas do sistema</p>
-                        </div>
+            </section>
 
-                        <div class="admin-stats-grid" id="adminStats">
-                            <div class="admin-stat-card">
-                                <span class="stat-label">Total Usuários</span>
-                                <span class="stat-value" id="adminTotalUsers">--</span>
-                            </div>
-                            <div class="admin-stat-card">
-                                <span class="stat-label">Novos Hoje</span>
-                                <span class="stat-value" id="adminNewToday">--</span>
-                            </div>
-                            <div class="admin-stat-card">
-                                <span class="stat-label">Refeições</span>
-                                <span class="stat-value" id="adminTotalMeals">--</span>
-                            </div>
-                        </div>
+            <!-- Admin Section -->
+            <section class="section" id="section-admin">
+                <div class="admin-container">
+                    <div class="admin-header">
+                        <h2>🔐 Painel Administrativo</h2>
+                        <p>Gestão de usuários e estatísticas do sistema</p>
+                    </div>
 
-                        <div class="card admin-users-card">
-                            <div class="card-header">
-                                <h3>Gestão de Usuários</h3>
-                                <div class="header-actions">
-                                    <button class="btn-outline btn-small" onclick="loadAdminUsers()">
-                                        <span>🔄</span> Atualizar
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="admin-table-wrapper">
-                                <table class="admin-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Usuário</th>
-                                            <th>Email</th>
-                                            <th>Role</th>
-                                            <th>Status Quiz</th>
-                                            <th>Cadastro</th>
-                                            <th>Ações</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="adminUsersList">
-                                        <!-- Preenchido via JS -->
-                                    </tbody>
-                                </table>
-                            </div>
+                    <div class="admin-stats-grid" id="adminStats">
+                        <div class="admin-stat-card">
+                            <span class="stat-label">Total Usuários</span>
+                            <span class="stat-value" id="adminTotalUsers">--</span>
+                        </div>
+                        <div class="admin-stat-card">
+                            <span class="stat-label">Novos Hoje</span>
+                            <span class="stat-value" id="adminNewToday">--</span>
+                        </div>
+                        <div class="admin-stat-card">
+                            <span class="stat-label">Refeições</span>
+                            <span class="stat-value" id="adminTotalMeals">--</span>
                         </div>
                     </div>
-                </section>
+
+                    <div class="card admin-users-card">
+                        <div class="card-header">
+                            <h3>Gestão de Usuários</h3>
+                            <div class="header-actions">
+                                <button class="btn-outline btn-small" onclick="loadAdminUsers()">
+                                    <span>🔄</span> Atualizar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="admin-table-wrapper">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Usuário</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Status Quiz</th>
+                                        <th>Cadastro</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminUsersList">
+                                    <!-- Preenchido via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
 
