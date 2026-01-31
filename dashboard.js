@@ -1779,8 +1779,10 @@ async function completeQuiz() {
 // ADMIN PANEL FUNCTIONS
 // ============================================
 async function loadAdminData() {
+    console.log('Admin Panel: Loading data...');
     await loadAdminStats();
     await loadAdminUsers();
+    console.log('Admin Panel: Data load complete');
 }
 
 async function loadAdminStats() {
