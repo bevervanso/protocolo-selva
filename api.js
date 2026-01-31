@@ -230,6 +230,32 @@ const ProfileAPI = {
 };
 
 // ============================================
+// ADMIN API
+// ============================================
+const AdminAPI = {
+    async getUsers() {
+        return await apiRequest('/admin/users');
+    },
+
+    async deleteUser(userId) {
+        return await apiRequest(`/admin/users/${userId}`, {
+            method: 'DELETE'
+        });
+    },
+
+    async updateUserRole(userId, role) {
+        return await apiRequest(`/admin/users/${userId}/role`, {
+            method: 'PATCH',
+            body: JSON.stringify({ role })
+        });
+    },
+
+    async getStats() {
+        return await apiRequest('/admin/stats');
+    }
+};
+
+// ============================================
 // HEALTH CHECK
 // ============================================
 async function checkAPIHealth() {
@@ -248,4 +274,5 @@ window.RecipesAPI = RecipesAPI;
 window.MealsAPI = MealsAPI;
 window.ProgressAPI = ProgressAPI;
 window.ProfileAPI = ProfileAPI;
+window.AdminAPI = AdminAPI;
 window.checkAPIHealth = checkAPIHealth;

@@ -118,6 +118,7 @@ router.post('/login', async (req, res) => {
                 id: user.id,
                 name: user.name,
                 email: user.email,
+                role: user.role,
                 createdAt: user.created_at
             }
         });
@@ -137,7 +138,7 @@ router.post('/login', async (req, res) => {
 router.get('/me', authenticateToken, (req, res) => {
     try {
         const user = db.prepare(`
-      SELECT u.id, u.name, u.email, u.created_at,
+      SELECT u.id, u.name, u.email, u.role, u.created_at,
              p.weight, p.height, p.goal, p.goal_weight, p.quiz_completed
       FROM users u
       LEFT JOIN profiles p ON u.id = p.user_id
@@ -157,6 +158,7 @@ router.get('/me', authenticateToken, (req, res) => {
                 id: user.id,
                 name: user.name,
                 email: user.email,
+                role: user.role,
                 createdAt: user.created_at,
                 profile: {
                     weight: user.weight,

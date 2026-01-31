@@ -70,7 +70,15 @@ async function checkDashboardAuth() {
     const userProfile = getUserProfile();
     if (!userProfile || !userProfile.quizCompleted) {
         // Mostrar quiz de onboarding
-        setTimeout(() => showQuizModal(), 500);
+        if (user.role !== 'admin') { // Admin não precisa do quiz obrigatório se não quiser
+            setTimeout(() => showQuizModal(), 500);
+        }
+    }
+
+    // Mostrar menu admin se for admin
+    if (user.role === 'admin') {
+        const adminLinks = document.querySelectorAll('.admin-only');
+        adminLinks.forEach(link => link.style.display = 'flex');
     }
 }
 
@@ -123,11 +131,16 @@ function switchSection(sectionId) {
         'recipes': 'Gerador de Receitas',
         'meals': 'Minhas Refeições',
         'progress': 'Meu Progresso',
-        'profile': 'Meu Perfil'
+        'profile': 'Meu Perfil',
+        'admin': 'Painel Administrativo'
     };
 
     if (pageTitle && titles[sectionId]) {
         pageTitle.textContent = titles[sectionId];
+    }
+
+    if (sectionId === 'admin') {
+        loadAdminData();
     }
 
     // Update nav active state
@@ -1754,4 +1767,104 @@ async function completeQuiz() {
 
     // Mostrar mensagem de sucesso
     showToast('Perfil configurado com sucesso! Bem-vindo ao Protocolo Selva! 🌿');
+}
+
+// ============================================
+// ADMIN PANEL FUNCTIONS
+// ============================================
+async function loadAdminData() {
+    await loadAdminStats();
+    await loadAdminUsers();
+}
+
+async function loadAdminStats() {
+    if (typeof AdminAPI === 'undefined') return;
+
+    try {
+        const response = await AdminAPI.getStats();
+        if (response.success) {
+            document.getElementById('adminTotalUsers').textContent = response.stats.totalUsers;
+            document.getElementById('adminNewToday').textContent = response.stats.newUsersToday;
+            document.getElementById('adminTotalMeals').textContent = response.stats.totalMeals;
+        }
+    } catch (e) {
+        console.error('Erro ao carregar estatísticas admin:', e);
+    }
+}
+
+async function loadAdminUsers() {
+    if (typeof AdminAPI === 'undefined') return;
+
+    const listBody = document.getElementById('adminUsersList');
+    if (!listBody) return;
+
+    listBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">⏳ Carregando usuários...</td></tr>';
+
+    try {
+        const response = await AdminAPI.getUsers();
+        if (response.success) {
+            if (response.users.length === 0) {
+                listBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">Nenhum usuário encontrado.</td></tr>';
+                return;
+            }
+
+            listBody.innerHTML = response.users.map(u => `
+                <tr>
+                    <td>
+                        <div style="font-weight: 500; color: var(--text-primary);">${u.name}</div>
+                    </td>
+                    <td>${u.email}</td>
+                    <td><span class="badge ${u.role === 'admin' ? 'badge-admin' : 'badge-user'}">${u.role}</span></td>
+                    <td>
+                        <span class="badge ${u.profile?.quizCompleted ? 'badge-quiz-ok' : 'badge-quiz-pending'}">
+                            ${u.profile?.quizCompleted ? 'Concluído' : 'Pendente'}
+                        </span>
+                    </td>
+                    <td>${new Date(u.createdAt).toLocaleDateString()}</td>
+                    <td class="admin-actions">
+                        <button class="btn-icon" title="Alternar Role" onclick="toggleUserRole(${u.id}, '${u.role}')">
+                            ${u.role === 'admin' ? '👤' : '🔐'}
+                        </button>
+                        <button class="btn-danger-text" title="Remover Usuário" onclick="deleteUser(${u.id}, '${u.email}')">
+                            🗑️
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+    } catch (e) {
+        listBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #ff4444; padding: 40px;">❌ Erro ao carregar usuários: ${e.message}</td></tr>`;
+    }
+}
+
+async function toggleUserRole(userId, currentRole) {
+    const newRole = currentRole === 'admin' ? 'user' : 'admin';
+    const confirmMsg = `Deseja alterar o acesso deste usuário para ${newRole.toUpperCase()}?`;
+
+    if (confirm(confirmMsg)) {
+        try {
+            const response = await AdminAPI.updateUserRole(userId, newRole);
+            if (response.success) {
+                showToast(response.message);
+                loadAdminUsers();
+            }
+        } catch (e) {
+            showToast('Erro ao atualizar papel do usuário ❌');
+        }
+    }
+}
+
+async function deleteUser(userId, email) {
+    if (confirm(`⚠️ TEM CERTEZA? Isso removerá permanentemente o usuário ${email} e todos os seus dados. Esta ação não pode ser desfeita.`)) {
+        try {
+            const response = await AdminAPI.deleteUser(userId);
+            if (response.success) {
+                showToast('Usuário removido com sucesso ✅');
+                loadAdminUsers();
+                loadAdminStats();
+            }
+        } catch (e) {
+            showToast('Erro ao remover usuário ❌');
+        }
+    }
 }

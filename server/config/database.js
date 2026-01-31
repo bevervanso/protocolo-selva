@@ -56,10 +56,19 @@ db.run(`
     name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
+    role TEXT DEFAULT 'user',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )
 `);
+
+// Garantir que a coluna 'role' exista e definir admin padrão
+try {
+  db.run("ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'user'");
+} catch (e) { }
+
+// Definir o admin especificado
+db.run("UPDATE users SET role = 'admin' WHERE email = 'buyexpressuk@gmail.com'");
 
 db.run(`
   CREATE TABLE IF NOT EXISTS profiles (

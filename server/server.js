@@ -23,6 +23,7 @@ import recipesRoutes from './routes/recipes.js';
 import mealsRoutes from './routes/meals.js';
 import progressRoutes from './routes/progress.js';
 import profileRoutes from './routes/profile.js';
+import adminRoutes from './routes/admin.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -49,6 +50,7 @@ app.use('/api/recipes', recipesRoutes);
 app.use('/api/meals', mealsRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/admin', adminRoutes);
 
 // ============================================
 // HEALTH CHECK
