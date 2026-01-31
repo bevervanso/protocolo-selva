@@ -1163,16 +1163,36 @@ body {
    ============================================ */
 .quiz-modal {
     z-index: 2000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition-normal);
+}
+
+.quiz-modal.active {
+    opacity: 1;
+    visibility: visible;
 }
 
 .quiz-modal .modal-content.quiz-content {
-    max-width: 600px;
-    width: 95%;
-    max-height: 90vh;
+    max-width: 550px;
+    width: 92%;
+    max-height: 85vh;
     overflow-y: auto;
     background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-dark) 100%);
-    border: 1px solid var(--primary);
+    border: 2px solid var(--primary);
+    border-radius: var(--radius-lg);
     animation: quizSlideIn 0.5s ease;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(27, 94, 32, 0.2);
 }
 
 @keyframes quizSlideIn {
@@ -1180,6 +1200,7 @@ body {
         opacity: 0;
         transform: scale(0.9) translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: scale(1) translateY(0);
@@ -1200,8 +1221,15 @@ body {
 }
 
 @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
 }
 
 .quiz-header h2 {
@@ -1261,6 +1289,7 @@ body {
         opacity: 0;
         transform: translateX(20px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -1317,7 +1346,7 @@ body {
     background: rgba(27, 94, 32, 0.1);
 }
 
-.quiz-option input:checked + .option-content {
+.quiz-option input:checked+.option-content {
     border-color: var(--primary);
     background: linear-gradient(135deg, rgba(27, 94, 32, 0.2) 0%, rgba(27, 94, 32, 0.1) 100%);
     box-shadow: 0 0 20px rgba(27, 94, 32, 0.2);
@@ -1383,8 +1412,15 @@ body {
 }
 
 @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
 }
 
 .quiz-result h3 {
@@ -1462,12 +1498,389 @@ body {
     .quiz-options.multi {
         grid-template-columns: 1fr;
     }
-    
+
     .quiz-header h2 {
         font-size: 1.3rem;
     }
-    
+
     .quiz-step h3 {
         font-size: 1.1rem;
+    }
+
+    .quiz-modal .modal-content.quiz-content {
+        width: 95%;
+        max-height: 90vh;
+        margin: 10px;
+        border-radius: var(--radius-md);
+    }
+
+    .quiz-header {
+        padding: 24px 16px 20px;
+    }
+
+    .quiz-icon {
+        font-size: 2.8rem;
+    }
+
+    .quiz-body {
+        padding: 16px;
+        min-height: auto;
+    }
+
+    .quiz-footer {
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .quiz-footer .btn-ghost,
+    .quiz-footer .btn-primary {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+
+    .quiz-option .option-content {
+        padding: 14px 16px;
+    }
+
+    .quiz-inputs input {
+        padding: 14px;
+        font-size: 1rem;
+    }
+
+    .profile-summary {
+        padding: 16px;
+    }
+
+    .profile-summary .summary-item {
+        padding: 10px 0;
+    }
+}
+
+/* ============================================
+   MOBILE RESPONSIVE - FULL DASHBOARD
+   ============================================ */
+@media (max-width: 768px) {
+
+    /* Sidebar Mobile */
+    .sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    /* Header */
+    .dashboard-header {
+        padding: 16px 20px;
+    }
+
+    .header-left h1 {
+        font-size: 1.2rem;
+    }
+
+    .greeting {
+        display: none;
+    }
+
+    .user-avatar {
+        width: 38px;
+        height: 38px;
+        font-size: 0.9rem;
+    }
+
+    /* Dashboard Content */
+    .dashboard-content {
+        padding: 16px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .stat-card {
+        padding: 18px 14px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .stat-icon {
+        font-size: 2rem;
+    }
+
+    .stat-value {
+        font-size: 1.6rem;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+    }
+
+    /* Dashboard Grid */
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 16px;
+    }
+
+    /* Actions Grid */
+    .actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .action-btn {
+        padding: 16px 12px;
+        font-size: 0.85rem;
+    }
+
+    .action-icon {
+        font-size: 1.5rem;
+    }
+
+    /* Recipe Generator */
+    .recipe-generator {
+        padding: 0;
+    }
+
+    .generator-header {
+        margin-bottom: 24px;
+    }
+
+    .generator-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .input-methods {
+        padding: 20px;
+    }
+
+    .method-tabs {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .method-tab {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+
+    .generator-options {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .option-group select {
+        padding: 10px 14px;
+        font-size: 0.9rem;
+    }
+
+    #method-text textarea {
+        min-height: 120px;
+        font-size: 0.95rem;
+    }
+
+    /* Recipe Card */
+    .recipe-card {
+        margin-top: 16px;
+    }
+
+    .recipe-header {
+        padding: 18px;
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    .recipe-header h3 {
+        font-size: 1.3rem;
+    }
+
+    .recipe-meta {
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .recipe-meta span {
+        font-size: 0.85rem;
+    }
+
+    .recipe-section {
+        padding: 18px;
+    }
+
+    .recipe-section h4 {
+        font-size: 1rem;
+    }
+
+    /* Meals Section */
+    .meals-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .meals-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .meals-filter {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .filter-btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+
+    .meals-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .meal-card-content {
+        padding: 16px;
+    }
+
+    /* Progress Section */
+    .progress-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .progress-stats {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .progress-stat {
+        padding: 18px;
+    }
+
+    .progress-stat .stat-value {
+        font-size: 2rem;
+    }
+
+    /* Charts */
+    .chart-container {
+        padding: 16px;
+        overflow-x: auto;
+    }
+
+    /* Profile Section */
+    .profile-header-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px 20px;
+    }
+
+    .profile-avatar-large {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8rem;
+    }
+
+    .profile-details h2 {
+        font-size: 1.4rem;
+    }
+
+    .profile-details p {
+        font-size: 0.9rem;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .preferences-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .preference-option {
+        padding: 14px;
+    }
+
+    /* Modals */
+    .modal-content {
+        width: 95%;
+        padding: 24px 20px;
+        margin: 16px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    /* Tip Card */
+    .tip-card {
+        padding: 16px;
+    }
+
+    .tip-card p {
+        font-size: 0.95rem;
+    }
+
+    /* Empty States */
+    .empty-state.full {
+        padding: 40px 20px;
+    }
+
+    .empty-icon {
+        font-size: 2.5rem;
+    }
+}
+
+/* Extra Small Devices */
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-card {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quiz-header h2 {
+        font-size: 1.1rem;
+    }
+
+    .quiz-step h3 {
+        font-size: 1rem;
+    }
+
+    .quiz-option .option-text {
+        font-size: 0.9rem;
+    }
+
+    .quiz-option .option-icon {
+        font-size: 1.3rem;
     }
 }
