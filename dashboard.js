@@ -75,10 +75,16 @@ async function checkDashboardAuth() {
         }
     }
 
-    // Mostrar menu admin se for admin
-    if (user.role === 'admin') {
+    // Mostrar menu admin se for admin ou se for o email principal de admin
+    const isAdminUser = user.role === 'admin' || user.email === 'buyexpressuk@gmail.com';
+    console.log('User role check:', { email: user.email, role: user.role, isAdmin: isAdminUser });
+
+    if (isAdminUser) {
         const adminLinks = document.querySelectorAll('.admin-only');
-        adminLinks.forEach(link => link.style.display = 'flex');
+        console.log('Showing admin links, found:', adminLinks.length);
+        adminLinks.forEach(link => {
+            link.style.setProperty('display', 'flex', 'important');
+        });
     }
 }
 
