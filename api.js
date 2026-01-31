@@ -2,7 +2,9 @@
 // API SERVICE - Comunicação com Backend
 // ============================================
 
-const API_BASE_URL = 'http://localhost:3001/api';
+// Detecta automaticamente se está em produção ou desenvolvimento
+const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+const API_BASE_URL = isProduction ? '/api' : 'http://localhost:3001/api';
 
 // ============================================
 // GERENCIAMENTO DE TOKEN
