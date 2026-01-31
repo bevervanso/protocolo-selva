@@ -565,55 +565,240 @@
                     </div>
                 </div>
 
-                <!-- Pergunta 2: Experiência -->
+                <!-- Pergunta 2: Dados Físicos -->
                 <div class="quiz-step" data-step="2">
-                    <h3>📚 Qual sua experiência com dietas low-carb?</h3>
-                    <div class="quiz-options">
-                        <label class="quiz-option">
-                            <input type="radio" name="experience" value="beginner">
-                            <span class="option-content">
-                                <span class="option-icon">🌱</span>
-                                <span class="option-text">Iniciante - Nunca fiz</span>
-                            </span>
-                        </label>
-                        <label class="quiz-option">
-                            <input type="radio" name="experience" value="intermediate">
-                            <span class="option-content">
-                                <span class="option-icon">🌿</span>
-                                <span class="option-text">Intermediário - Já tentei algumas vezes</span>
-                            </span>
-                        </label>
-                        <label class="quiz-option">
-                            <input type="radio" name="experience" value="advanced">
-                            <span class="option-content">
-                                <span class="option-icon">🌳</span>
-                                <span class="option-text">Avançado - Pratico há bastante tempo</span>
-                            </span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Pergunta 3: Peso e Meta -->
-                <div class="quiz-step" data-step="3">
-                    <h3>⚖️ Conte-nos sobre seu peso</h3>
+                    <h3>📏 Seus dados físicos</h3>
                     <div class="quiz-inputs">
-                        <div class="input-group">
-                            <label for="quizWeight">Peso atual (kg)</label>
-                            <input type="number" id="quizWeight" placeholder="Ex: 75" step="0.1" min="30" max="300">
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label for="quizAge">Idade</label>
+                                <input type="number" id="quizAge" placeholder="Ex: 35" min="16" max="100">
+                            </div>
+                            <div class="input-group">
+                                <label for="quizGender">Sexo</label>
+                                <select id="quizGender">
+                                    <option value="">Selecione</option>
+                                    <option value="male">Masculino</option>
+                                    <option value="female">Feminino</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label for="quizWeight">Peso atual (kg)</label>
+                                <input type="number" id="quizWeight" placeholder="Ex: 75" step="0.1" min="30" max="300">
+                            </div>
+                            <div class="input-group">
+                                <label for="quizHeight">Altura (cm)</label>
+                                <input type="number" id="quizHeight" placeholder="Ex: 170" min="100" max="250">
+                            </div>
                         </div>
                         <div class="input-group">
                             <label for="quizGoalWeight">Peso desejado (kg)</label>
                             <input type="number" id="quizGoalWeight" placeholder="Ex: 68" step="0.1" min="30" max="300">
                         </div>
-                        <div class="input-group">
-                            <label for="quizHeight">Altura (cm)</label>
-                            <input type="number" id="quizHeight" placeholder="Ex: 170" min="100" max="250">
-                        </div>
                     </div>
                 </div>
 
-                <!-- Pergunta 4: Preferências Alimentares -->
+                <!-- Pergunta 3: Nível de Atividade Física -->
+                <div class="quiz-step" data-step="3">
+                    <h3>🏋️ Qual seu nível de atividade física?</h3>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="activityLevel" value="sedentary">
+                            <span class="option-content">
+                                <span class="option-icon">🛋️</span>
+                                <span class="option-text">Sedentário - Pouco ou nenhum exercício</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="activityLevel" value="light">
+                            <span class="option-content">
+                                <span class="option-icon">🚶</span>
+                                <span class="option-text">Leve - Exercício 1-2x por semana</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="activityLevel" value="moderate">
+                            <span class="option-content">
+                                <span class="option-icon">🏃</span>
+                                <span class="option-text">Moderado - Exercício 3-4x por semana</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="activityLevel" value="active">
+                            <span class="option-content">
+                                <span class="option-icon">💪</span>
+                                <span class="option-text">Ativo - Exercício 5-6x por semana</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="activityLevel" value="athlete">
+                            <span class="option-content">
+                                <span class="option-icon">🏆</span>
+                                <span class="option-text">Atleta - Treino intenso diário</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 4: Nível de Estresse -->
                 <div class="quiz-step" data-step="4">
+                    <h3>😰 Qual seu nível de estresse no dia a dia?</h3>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="stressLevel" value="low">
+                            <span class="option-content">
+                                <span class="option-icon">😌</span>
+                                <span class="option-text">Baixo - Me sinto tranquilo na maior parte do tempo</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="stressLevel" value="moderate">
+                            <span class="option-content">
+                                <span class="option-icon">😐</span>
+                                <span class="option-text">Moderado - Tenho momentos de estresse ocasionais</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="stressLevel" value="high">
+                            <span class="option-content">
+                                <span class="option-icon">😓</span>
+                                <span class="option-text">Alto - Me sinto estressado frequentemente</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="stressLevel" value="very_high">
+                            <span class="option-content">
+                                <span class="option-icon">🤯</span>
+                                <span class="option-text">Muito alto - Estresse constante</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 5: Qualidade do Sono -->
+                <div class="quiz-step" data-step="5">
+                    <h3>😴 Como está sua qualidade de sono?</h3>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="sleepQuality" value="excellent">
+                            <span class="option-content">
+                                <span class="option-icon">⭐</span>
+                                <span class="option-text">Excelente - Durmo bem e acordo disposto</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="sleepQuality" value="good">
+                            <span class="option-content">
+                                <span class="option-icon">😊</span>
+                                <span class="option-text">Boa - Na maioria das noites durmo bem</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="sleepQuality" value="regular">
+                            <span class="option-content">
+                                <span class="option-icon">😕</span>
+                                <span class="option-text">Regular - Às vezes tenho dificuldade</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="sleepQuality" value="poor">
+                            <span class="option-content">
+                                <span class="option-icon">😫</span>
+                                <span class="option-text">Ruim - Durmo mal frequentemente</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 6: Hidratação -->
+                <div class="quiz-step" data-step="6">
+                    <h3>💧 Quantos copos de água você bebe por dia?</h3>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="hydration" value="low">
+                            <span class="option-content">
+                                <span class="option-icon">🥤</span>
+                                <span class="option-text">Menos de 4 copos (menos de 1 litro)</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="hydration" value="moderate">
+                            <span class="option-content">
+                                <span class="option-icon">💧</span>
+                                <span class="option-text">4 a 6 copos (1 a 1.5 litros)</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="hydration" value="good">
+                            <span class="option-content">
+                                <span class="option-icon">💦</span>
+                                <span class="option-text">6 a 8 copos (1.5 a 2 litros)</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="hydration" value="excellent">
+                            <span class="option-content">
+                                <span class="option-icon">🌊</span>
+                                <span class="option-text">Mais de 8 copos (mais de 2 litros)</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 7: Hábitos Alimentares Atuais -->
+                <div class="quiz-step" data-step="7">
+                    <h3>🍔 Como são seus hábitos alimentares atuais?</h3>
+                    <p class="quiz-subtitle">Selecione todos que se aplicam</p>
+                    <div class="quiz-options multi">
+                        <label class="quiz-option">
+                            <input type="checkbox" name="currentHabits" value="fast_food">
+                            <span class="option-content">
+                                <span class="option-icon">🍟</span>
+                                <span class="option-text">Como fast-food frequentemente</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="currentHabits" value="sugar">
+                            <span class="option-content">
+                                <span class="option-icon">🍫</span>
+                                <span class="option-text">Consumo muito açúcar/doces</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="currentHabits" value="soda">
+                            <span class="option-content">
+                                <span class="option-icon">🥤</span>
+                                <span class="option-text">Tomo refrigerante/sucos industrializados</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="currentHabits" value="processed">
+                            <span class="option-content">
+                                <span class="option-icon">📦</span>
+                                <span class="option-text">Como muitos ultraprocessados</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="currentHabits" value="skip_meals">
+                            <span class="option-content">
+                                <span class="option-icon">⏭️</span>
+                                <span class="option-text">Pulo refeições frequentemente</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="currentHabits" value="healthy">
+                            <span class="option-content">
+                                <span class="option-icon">🥗</span>
+                                <span class="option-text">Já me alimento de forma saudável</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Pergunta 8: Proteínas Favoritas -->
+                <div class="quiz-step" data-step="8">
                     <h3>🥩 Quais suas proteínas favoritas?</h3>
                     <p class="quiz-subtitle">Selecione todas que você gosta</p>
                     <div class="quiz-options multi">
@@ -662,9 +847,10 @@
                     </div>
                 </div>
 
-                <!-- Pergunta 5: Restrições -->
-                <div class="quiz-step" data-step="5">
-                    <h3>⚠️ Possui alguma restrição alimentar?</h3>
+                <!-- Pergunta 9: Restrições -->
+                <div class="quiz-step" data-step="9">
+                    <h3>⚠️ Possui alguma restrição ou alergia?</h3>
+                    <p class="quiz-subtitle">Selecione todas que se aplicam</p>
                     <div class="quiz-options multi">
                         <label class="quiz-option">
                             <input type="checkbox" name="restrictions" value="none">
@@ -681,6 +867,13 @@
                             </span>
                         </label>
                         <label class="quiz-option">
+                            <input type="checkbox" name="restrictions" value="gluten">
+                            <span class="option-content">
+                                <span class="option-icon">🌾</span>
+                                <span class="option-text">Intolerância ao glúten</span>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
                             <input type="checkbox" name="restrictions" value="seafood">
                             <span class="option-content">
                                 <span class="option-icon">🦐</span>
@@ -694,11 +887,18 @@
                                 <span class="option-text">Não como carne de porco</span>
                             </span>
                         </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="restrictions" value="eggs">
+                            <span class="option-content">
+                                <span class="option-icon">🥚</span>
+                                <span class="option-text">Alergia a ovos</span>
+                            </span>
+                        </label>
                     </div>
                 </div>
 
-                <!-- Pergunta 6: Rotina -->
-                <div class="quiz-step" data-step="6">
+                <!-- Pergunta 10: Rotina de Refeições -->
+                <div class="quiz-step" data-step="10">
                     <h3>⏰ Como é sua rotina de refeições?</h3>
                     <div class="quiz-options">
                         <label class="quiz-option">

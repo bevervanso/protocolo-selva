@@ -558,9 +558,69 @@ async function generateRecipe() {
             const mealType = document.getElementById('mealType')?.value || 'any';
             const cookTime = document.getElementById('cookTime')?.value || 'any';
 
+            // Obter perfil do usuário para personalização
+            const userProfile = getUserProfile();
+
+            // Construir preferências personalizadas
             let preferences = '';
-            if (mealType !== 'any') preferences += `Tipo: ${mealType}. `;
-            if (cookTime !== 'any') preferences += `Tempo máximo: ${cookTime} minutos.`;
+            if (mealType !== 'any') preferences += `Tipo de refeição: ${mealType}. `;
+            if (cookTime !== 'any') preferences += `Tempo máximo de preparo: ${cookTime} minutos. `;
+
+            // Adicionar preferências do perfil do usuário
+            if (userProfile) {
+                // Objetivo
+                const goalTexts = {
+                    'lose_weight': 'FOCO EM EMAGRECIMENTO - receita com menos calorias, mais proteína e saciedade',
+                    'gain_muscle': 'FOCO EM GANHO DE MASSA - receita rica em proteína e calorias adequadas',
+                    'health': 'FOCO EM SAÚDE - receita nutritiva e equilibrada',
+                    'energy': 'FOCO EM ENERGIA - receita que proporciona disposição prolongada'
+                };
+                if (userProfile.goal && goalTexts[userProfile.goal]) {
+                    preferences += `${goalTexts[userProfile.goal]}. `;
+                }
+
+                // Proteínas favoritas
+                if (userProfile.favoriteProteins && userProfile.favoriteProteins.length > 0) {
+                    const proteinNames = {
+                        'beef': 'carne bovina',
+                        'chicken': 'frango',
+                        'pork': 'porco/bacon',
+                        'fish': 'peixes',
+                        'eggs': 'ovos',
+                        'cheese': 'queijos'
+                    };
+                    const proteinsText = userProfile.favoriteProteins.map(p => proteinNames[p] || p).join(', ');
+                    preferences += `Proteínas preferidas: ${proteinsText}. `;
+                }
+
+                // Restrições alimentares
+                if (userProfile.restrictions && userProfile.restrictions.length > 0 && !userProfile.restrictions.includes('none')) {
+                    const restrictionNames = {
+                        'lactose': 'intolerância à lactose (EVITAR laticínios)',
+                        'gluten': 'intolerância ao glúten (EVITAR glúten)',
+                        'seafood': 'alergia a frutos do mar (EVITAR peixes e frutos do mar)',
+                        'pork': 'não come carne de porco (EVITAR porco e bacon)',
+                        'eggs': 'alergia a ovos (EVITAR ovos)'
+                    };
+                    const restrictionsText = userProfile.restrictions.map(r => restrictionNames[r] || r).join('; ');
+                    preferences += `RESTRIÇÕES IMPORTANTES: ${restrictionsText}. `;
+                }
+
+                // Nível de estresse (alimentos calmantes)
+                if (userProfile.stressLevel === 'high' || userProfile.stressLevel === 'very_high') {
+                    preferences += 'Pessoa com ALTO ESTRESSE - incluir ingredientes relaxantes e nutritivos. ';
+                }
+
+                // Qualidade do sono
+                if (userProfile.sleepQuality === 'poor' || userProfile.sleepQuality === 'regular') {
+                    preferences += 'Qualidade de sono ruim - evitar cafeína, preferir alimentos que ajudam no sono. ';
+                }
+
+                // Nível de atividade
+                if (userProfile.activityLevel === 'athlete' || userProfile.activityLevel === 'active') {
+                    preferences += 'Pessoa muito ativa - receita com mais proteína para recuperação muscular. ';
+                }
+            }
 
             const response = await RecipesAPI.generate(ingredients, preferences);
 
@@ -1055,7 +1115,7 @@ function formatDateLong(dateStr) {
 // QUIZ ONBOARDING
 // ============================================
 let currentQuizStep = 1;
-const totalQuizSteps = 6;
+const totalQuizSteps = 10;
 let quizData = {};
 
 // Obter perfil do usuário
@@ -1186,41 +1246,81 @@ function validateAndCollectQuizStep() {
             quizData.goal = goal.value;
             break;
 
-        case 2: // Experiência
-            const experience = document.querySelector('input[name="experience"]:checked');
-            if (!experience) {
-                showToast('Por favor, selecione sua experiência', 'error');
-                return false;
-            }
-            quizData.experience = experience.value;
-            break;
-
-        case 3: // Peso
+        case 2: // Dados Físicos
+            const age = document.getElementById('quizAge')?.value;
+            const gender = document.getElementById('quizGender')?.value;
             const weight = document.getElementById('quizWeight')?.value;
-            const goalWeight = document.getElementById('quizGoalWeight')?.value;
             const height = document.getElementById('quizHeight')?.value;
+            const goalWeight = document.getElementById('quizGoalWeight')?.value;
 
-            if (!weight) {
-                showToast('Por favor, informe seu peso atual', 'error');
+            if (!age || !gender || !weight || !height) {
+                showToast('Por favor, preencha todos os dados físicos', 'error');
                 return false;
             }
 
+            quizData.age = parseInt(age);
+            quizData.gender = gender;
             quizData.weight = parseFloat(weight);
-            quizData.goalWeight = goalWeight ? parseFloat(goalWeight) : null;
-            quizData.height = height ? parseInt(height) : null;
+            quizData.height = parseInt(height);
+            quizData.goalWeight = goalWeight ? parseFloat(goalWeight) : quizData.weight;
+
+            // Calcular IMC
+            const heightM = quizData.height / 100;
+            quizData.bmi = (quizData.weight / (heightM * heightM)).toFixed(1);
             break;
 
-        case 4: // Proteínas favoritas
+        case 3: // Nível de Atividade
+            const activity = document.querySelector('input[name="activityLevel"]:checked');
+            if (!activity) {
+                showToast('Por favor, selecione seu nível de atividade', 'error');
+                return false;
+            }
+            quizData.activityLevel = activity.value;
+            break;
+
+        case 4: // Nível de Estresse
+            const stress = document.querySelector('input[name="stressLevel"]:checked');
+            if (!stress) {
+                showToast('Por favor, selecione seu nível de estresse', 'error');
+                return false;
+            }
+            quizData.stressLevel = stress.value;
+            break;
+
+        case 5: // Qualidade do Sono
+            const sleep = document.querySelector('input[name="sleepQuality"]:checked');
+            if (!sleep) {
+                showToast('Por favor, selecione sua qualidade de sono', 'error');
+                return false;
+            }
+            quizData.sleepQuality = sleep.value;
+            break;
+
+        case 6: // Hidratação
+            const hydration = document.querySelector('input[name="hydration"]:checked');
+            if (!hydration) {
+                showToast('Por favor, selecione seu nível de hidratação', 'error');
+                return false;
+            }
+            quizData.hydration = hydration.value;
+            break;
+
+        case 7: // Hábitos Alimentares Atuais
+            const habits = document.querySelectorAll('input[name="currentHabits"]:checked');
+            quizData.currentHabits = Array.from(habits).map(h => h.value);
+            break;
+
+        case 8: // Proteínas favoritas
             const proteins = document.querySelectorAll('input[name="proteins"]:checked');
             quizData.favoriteProteins = Array.from(proteins).map(p => p.value);
             break;
 
-        case 5: // Restrições
+        case 9: // Restrições
             const restrictions = document.querySelectorAll('input[name="restrictions"]:checked');
             quizData.restrictions = Array.from(restrictions).map(r => r.value);
             break;
 
-        case 6: // Rotina
+        case 10: // Rotina
             const routine = document.querySelector('input[name="routine"]:checked');
             if (!routine) {
                 showToast('Por favor, selecione sua rotina', 'error');
@@ -1264,19 +1364,26 @@ function showQuizResult() {
         resultStep.innerHTML = `
             <div class="result-icon">🎉</div>
             <h3>Seu Perfil na Dieta da Selva</h3>
-            <div class="profile-summary" id="profileSummary">
+            <div class="profile-summary scrollable" id="profileSummary">
                 <div class="summary-item">
                     <span class="summary-icon">🎯</span>
                     <div>
-                        <div class="summary-label">Seu Objetivo</div>
+                        <div class="summary-label">Objetivo</div>
                         <div class="summary-value">${profile.goalText}</div>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-icon">👤</span>
+                    <div>
+                        <div class="summary-label">Dados Físicos</div>
+                        <div class="summary-value">${profile.physicalDataText}</div>
                     </div>
                 </div>
                 <div class="summary-item">
                     <span class="summary-icon">📊</span>
                     <div>
-                        <div class="summary-label">Nível</div>
-                        <div class="summary-value">${profile.levelText}</div>
+                        <div class="summary-label">IMC</div>
+                        <div class="summary-value">${profile.bmiText}</div>
                     </div>
                 </div>
                 <div class="summary-item">
@@ -1284,6 +1391,34 @@ function showQuizResult() {
                     <div>
                         <div class="summary-label">Meta de Peso</div>
                         <div class="summary-value">${profile.weightGoalText}</div>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-icon">🏋️</span>
+                    <div>
+                        <div class="summary-label">Atividade Física</div>
+                        <div class="summary-value">${profile.activityText}</div>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-icon">😰</span>
+                    <div>
+                        <div class="summary-label">Nível de Estresse</div>
+                        <div class="summary-value">${profile.stressText}</div>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-icon">😴</span>
+                    <div>
+                        <div class="summary-label">Qualidade do Sono</div>
+                        <div class="summary-value">${profile.sleepText}</div>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-icon">💧</span>
+                    <div>
+                        <div class="summary-label">Hidratação</div>
+                        <div class="summary-value">${profile.hydrationText}</div>
                     </div>
                 </div>
                 <div class="summary-item">
@@ -1337,10 +1472,33 @@ function calculateProfile() {
         'energy': 'Mais energia e disposição'
     };
 
-    const experienceTexts = {
-        'beginner': '🌱 Iniciante',
-        'intermediate': '🌿 Intermediário',
-        'advanced': '🌳 Avançado'
+    const activityTexts = {
+        'sedentary': '🛋️ Sedentário',
+        'light': '🚶 Leve',
+        'moderate': '🏃 Moderado',
+        'active': '💪 Ativo',
+        'athlete': '🏆 Atleta'
+    };
+
+    const stressTexts = {
+        'low': '😌 Baixo',
+        'moderate': '😐 Moderado',
+        'high': '😓 Alto',
+        'very_high': '🤯 Muito alto'
+    };
+
+    const sleepTexts = {
+        'excellent': '⭐ Excelente',
+        'good': '😊 Boa',
+        'regular': '😕 Regular',
+        'poor': '😫 Ruim'
+    };
+
+    const hydrationTexts = {
+        'low': '🥤 Menos de 1L',
+        'moderate': '💧 1-1.5L',
+        'good': '💦 1.5-2L',
+        'excellent': '🌊 Mais de 2L'
     };
 
     const routineTexts = {
@@ -1357,6 +1515,11 @@ function calculateProfile() {
         'fish': 'Peixes',
         'eggs': 'Ovos',
         'cheese': 'Queijos'
+    };
+
+    const genderTexts = {
+        'male': 'Masculino',
+        'female': 'Feminino'
     };
 
     // Calcular meta de peso
@@ -1379,13 +1542,38 @@ function calculateProfile() {
         ? quizData.favoriteProteins.map(p => proteinNames[p] || p).join(', ')
         : 'Todas as proteínas';
 
+    // Dados físicos
+    const physicalDataText = quizData.age && quizData.gender && quizData.height
+        ? `${quizData.age} anos, ${genderTexts[quizData.gender]}, ${quizData.height}cm`
+        : 'Não informado';
+
+    // IMC
+    const bmiText = quizData.bmi
+        ? `${quizData.bmi} (${getBmiCategory(parseFloat(quizData.bmi))})`
+        : 'Não calculado';
+
     return {
         goalText: goalTexts[quizData.goal] || 'Não definido',
-        levelText: experienceTexts[quizData.experience] || 'Não definido',
+        physicalDataText,
+        bmiText,
         weightGoalText,
+        activityText: activityTexts[quizData.activityLevel] || 'Não definido',
+        stressText: stressTexts[quizData.stressLevel] || 'Não definido',
+        sleepText: sleepTexts[quizData.sleepQuality] || 'Não definido',
+        hydrationText: hydrationTexts[quizData.hydration] || 'Não definido',
         routineText: routineTexts[quizData.routine] || 'Não definido',
         proteinsText
     };
+}
+
+// Categorizar IMC
+function getBmiCategory(bmi) {
+    if (bmi < 18.5) return 'Abaixo do peso';
+    if (bmi < 25) return 'Peso normal';
+    if (bmi < 30) return 'Sobrepeso';
+    if (bmi < 35) return 'Obesidade I';
+    if (bmi < 40) return 'Obesidade II';
+    return 'Obesidade III';
 }
 
 // Completar quiz e salvar perfil
@@ -1394,11 +1582,22 @@ function completeQuiz() {
     const profile = {
         quizCompleted: true,
         completedAt: new Date().toISOString(),
+        // Objetivo
         goal: quizData.goal,
-        experience: quizData.experience,
+        // Dados físicos
+        age: quizData.age,
+        gender: quizData.gender,
         weight: quizData.weight,
-        goalWeight: quizData.goalWeight,
         height: quizData.height,
+        goalWeight: quizData.goalWeight,
+        bmi: quizData.bmi,
+        // Hábitos e estilo de vida
+        activityLevel: quizData.activityLevel,
+        stressLevel: quizData.stressLevel,
+        sleepQuality: quizData.sleepQuality,
+        hydration: quizData.hydration,
+        currentHabits: quizData.currentHabits || [],
+        // Preferências alimentares
         favoriteProteins: quizData.favoriteProteins || [],
         restrictions: quizData.restrictions || [],
         routine: quizData.routine

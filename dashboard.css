@@ -1373,13 +1373,20 @@ body {
     gap: 8px;
 }
 
+.quiz-inputs .input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
 .quiz-inputs label {
     font-size: 0.95rem;
     font-weight: 500;
     color: var(--text-secondary);
 }
 
-.quiz-inputs input {
+.quiz-inputs input,
+.quiz-inputs select {
     padding: 16px;
     background: var(--bg-dark);
     border: 2px solid var(--border);
@@ -1390,7 +1397,17 @@ body {
     transition: border-color 0.2s;
 }
 
-.quiz-inputs input:focus {
+.quiz-inputs select {
+    cursor: pointer;
+}
+
+.quiz-inputs select option {
+    background: var(--bg-dark);
+    color: var(--text-primary);
+}
+
+.quiz-inputs input:focus,
+.quiz-inputs select:focus {
     outline: none;
     border-color: var(--primary);
 }
@@ -1435,6 +1452,26 @@ body {
     padding: 24px;
     margin-bottom: 24px;
     text-align: left;
+}
+
+.profile-summary.scrollable {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Custom scrollbar for profile summary */
+.profile-summary.scrollable::-webkit-scrollbar {
+    width: 6px;
+}
+
+.profile-summary.scrollable::-webkit-scrollbar-track {
+    background: var(--bg-card);
+    border-radius: 3px;
+}
+
+.profile-summary.scrollable::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 3px;
 }
 
 .profile-summary .summary-item {
@@ -1547,8 +1584,22 @@ body {
         font-size: 1rem;
     }
 
+    .quiz-inputs select {
+        padding: 14px;
+        font-size: 1rem;
+    }
+
+    .quiz-inputs .input-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
     .profile-summary {
         padding: 16px;
+    }
+
+    .profile-summary.scrollable {
+        max-height: 200px;
     }
 
     .profile-summary .summary-item {
