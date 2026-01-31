@@ -1238,49 +1238,11 @@ function showQuizResult() {
     // Calcular perfil com base nas respostas
     const profile = calculateProfile();
 
-    // Renderizar resumo
-    const summaryContainer = document.getElementById('profileSummary');
-    if (summaryContainer) {
-        summaryContainer.innerHTML = `
-            <div class="summary-item">
-                <span class="summary-icon">🎯</span>
-                <div>
-                    <div class="summary-label">Seu Objetivo</div>
-                    <div class="summary-value">${profile.goalText}</div>
-                </div>
-            </div>
-            <div class="summary-item">
-                <span class="summary-icon">📊</span>
-                <div>
-                    <div class="summary-label">Nível</div>
-                    <div class="summary-value">${profile.levelText}</div>
-                </div>
-            </div>
-            <div class="summary-item">
-                <span class="summary-icon">⚖️</span>
-                <div>
-                    <div class="summary-label">Meta de Peso</div>
-                    <div class="summary-value">${profile.weightGoalText}</div>
-                </div>
-            </div>
-            <div class="summary-item">
-                <span class="summary-icon">🍽️</span>
-                <div>
-                    <div class="summary-label">Rotina</div>
-                    <div class="summary-value">${profile.routineText}</div>
-                </div>
-            </div>
-            <div class="summary-item">
-                <span class="summary-icon">🥩</span>
-                <div>
-                    <div class="summary-label">Proteínas Favoritas</div>
-                    <div class="summary-value">${profile.proteinsText}</div>
-                </div>
-            </div>
-        `;
-    }
+    // Esconder footer durante resultado
+    const footer = document.getElementById('quizFooter');
+    if (footer) footer.style.display = 'none';
 
-    // Esconder header de progresso
+    // Esconder header de progresso e mostrar novo header
     const quizHeader = document.querySelector('.quiz-header');
     if (quizHeader) {
         quizHeader.innerHTML = `
@@ -1297,6 +1259,72 @@ function showQuizResult() {
     const resultStep = document.querySelector('.quiz-step[data-step="result"]');
     if (resultStep) {
         resultStep.classList.add('active');
+
+        // Garantir que o conteúdo do resultado seja renderizado
+        resultStep.innerHTML = `
+            <div class="result-icon">🎉</div>
+            <h3>Seu Perfil na Dieta da Selva</h3>
+            <div class="profile-summary" id="profileSummary">
+                <div class="summary-item">
+                    <span class="summary-icon">🎯</span>
+                    <div>
+                        <div class="summary-label">Seu Objetivo</div>
+                        <div class="summary-value">${profile.goalText}</div>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-icon">📊</span>
+                    <div>
+                        <div class="summary-label">Nível</div>
+                        <div class="summary-value">${profile.levelText}</div>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-icon">⚖️</span>
+                    <div>
+                        <div class="summary-label">Meta de Peso</div>
+                        <div class="summary-value">${profile.weightGoalText}</div>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-icon">🍽️</span>
+                    <div>
+                        <div class="summary-label">Rotina</div>
+                        <div class="summary-value">${profile.routineText}</div>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-icon">🥩</span>
+                    <div>
+                        <div class="summary-label">Proteínas Favoritas</div>
+                        <div class="summary-value">${profile.proteinsText}</div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-primary btn-full btn-large" onclick="completeQuiz()" style="margin-top: 24px;">
+                <span>🚀</span> Começar a Jornada!
+            </button>
+            <p style="text-align: center; margin-top: 12px; color: var(--text-muted); font-size: 0.85rem;">
+                Fechando automaticamente em <span id="autoCloseCountdown">5</span>s...
+            </p>
+        `;
+
+        // Auto-close countdown
+        let countdown = 5;
+        const countdownEl = document.getElementById('autoCloseCountdown');
+        const autoCloseInterval = setInterval(() => {
+            countdown--;
+            if (countdownEl) countdownEl.textContent = countdown;
+            if (countdown <= 0) {
+                clearInterval(autoCloseInterval);
+                completeQuiz();
+            }
+        }, 1000);
+
+        // Cancelar auto-close se clicar no botão
+        resultStep.querySelector('button')?.addEventListener('click', () => {
+            clearInterval(autoCloseInterval);
+        });
     }
 }
 
