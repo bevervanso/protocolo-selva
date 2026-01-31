@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Protocolo Selva - A dieta ancestral que transforma seu corpo. Receitas, acompanhamento e gerador de refeições com IA.">
+    <title>Protocolo Selva - Dieta Ancestral | Transforme Seu Corpo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <span class="logo-icon">🌿</span>
+                <span class="logo-text">Protocolo<span class="highlight">Selva</span></span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#beneficios">Benefícios</a></li>
+                <li><a href="#como-funciona">Como Funciona</a></li>
+                <li><a href="#receitas">Receitas</a></li>
+                <li><a href="#depoimentos">Depoimentos</a></li>
+                <li><a href="#preco">Preços</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <button class="btn-ghost" onclick="openModal('loginModal')">Entrar</button>
+                <button class="btn-primary" onclick="openModal('registerModal')">Começar Agora</button>
+            </div>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav-links">
+            <li><a href="#beneficios" onclick="toggleMobileMenu()">Benefícios</a></li>
+            <li><a href="#como-funciona" onclick="toggleMobileMenu()">Como Funciona</a></li>
+            <li><a href="#receitas" onclick="toggleMobileMenu()">Receitas</a></li>
+            <li><a href="#depoimentos" onclick="toggleMobileMenu()">Depoimentos</a></li>
+            <li><a href="#preco" onclick="toggleMobileMenu()">Preços</a></li>
+        </ul>
+        <div class="mobile-nav-buttons">
+            <button class="btn-ghost" onclick="openModal('loginModal'); toggleMobileMenu()">Entrar</button>
+            <button class="btn-primary" onclick="openModal('registerModal'); toggleMobileMenu()">Começar Agora</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-icon">🔥</span>
+                <span>+2.500 pessoas transformadas</span>
+            </div>
+            <h1 class="hero-title">
+                Desperte o <span class="gradient-text">Predador</span>
+                <br>Dentro de Você
+            </h1>
+            <p class="hero-subtitle">
+                A dieta ancestral que elimina gordura, aumenta sua energia e
+                transforma seu corpo em uma máquina de alta performance.
+            </p>
+            <div class="hero-cta">
+                <button class="btn-primary btn-large pulse-animation" onclick="openModal('registerModal')">
+                    <span>🌿</span> Começar Protocolo Selva
+                </button>
+                <button class="btn-ghost btn-large" onclick="scrollToSection('como-funciona')">
+                    <span>▶</span> Ver como funciona
+                </button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">97%</span>
+                    <span class="stat-label">Taxa de sucesso</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">-8kg</span>
+                    <span class="stat-label">Média em 30 dias</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">+500</span>
+                    <span class="stat-label">Receitas exclusivas</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="hero-image-container">
+                <img src="images/healthy_person.png" alt="Pessoa saudável na natureza" class="hero-img">
+                <div class="floating-card card-1">
+                    <span class="card-icon">🥩</span>
+                    <span class="card-text">Proteína Natural</span>
+                </div>
+                <div class="floating-card card-2">
+                    <span class="card-icon">🥗</span>
+                    <span class="card-text">Zero Processados</span>
+                </div>
+                <div class="floating-card card-3">
+                    <span class="card-icon">⚡</span>
+                    <span class="card-text">+300% Energia</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee Section -->
+    <section class="marquee-section">
+        <div class="marquee">
+            <div class="marquee-content">
+                <span>🌿 Dieta Ancestral</span>
+                <span>🥩 Proteínas de Qualidade</span>
+                <span>🥑 Gorduras Saudáveis</span>
+                <span>🔥 Queima de Gordura</span>
+                <span>⚡ Energia Ilimitada</span>
+                <span>💪 Força Máxima</span>
+                <span>🧠 Foco Mental</span>
+                <span>🌿 Dieta Ancestral</span>
+                <span>🥩 Proteínas de Qualidade</span>
+                <span>🥑 Gorduras Saudáveis</span>
+                <span>🔥 Queima de Gordura</span>
+                <span>⚡ Energia Ilimitada</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits" id="beneficios">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Por que escolher o Protocolo Selva?</span>
+                <h2 class="section-title">Benefícios que <span class="gradient-text">Transformam</span></h2>
+                <p class="section-subtitle">Nossa abordagem ancestral reconecta você com a alimentação natural do ser
+                    humano</p>
+            </div>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">🔥</div>
+                    <h3>Queima Gordura 24h</h3>
+                    <p>Seu corpo entra em modo de queima contínua, utilizando gordura como combustível principal.</p>
+                </div>
+                <div class="benefit-card featured">
+                    <div class="benefit-icon">⚡</div>
+                    <h3>Energia Constante</h3>
+                    <p>Sem picos de açúcar, sem crashes. Energia estável durante todo o dia.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🧠</div>
+                    <h3>Clareza Mental</h3>
+                    <p>Foco e concentração ampliados. Sua mente funciona como nunca antes.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">💪</div>
+                    <h3>Músculos Definidos</h3>
+                    <p>Proteínas de alta qualidade que constroem e mantêm massa muscular magra.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">😴</div>
+                    <h3>Sono Reparador</h3>
+                    <p>Durma profundamente e acorde renovado. Recuperação total.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🛡️</div>
+                    <h3>Imunidade Forte</h3>
+                    <p>Sistema imunológico fortalecido com nutrientes essenciais da natureza.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works Section -->
+    <section class="how-it-works" id="como-funciona">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Simples e Eficaz</span>
+                <h2 class="section-title">Como <span class="gradient-text">Funciona</span></h2>
+                <p class="section-subtitle">Em apenas 3 passos você começa sua transformação</p>
+            </div>
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Cadastre-se</h3>
+                        <p>Crie sua conta e preencha seu perfil com seus objetivos e preferências alimentares.</p>
+                    </div>
+                    <div class="step-icon">📝</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Receba seu Plano</h3>
+                        <p>Nossa IA gera um plano personalizado com receitas e cardápios exclusivos para você.</p>
+                    </div>
+                    <div class="step-icon">🤖</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step-card">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Transforme-se</h3>
+                        <p>Acompanhe seu progresso no dashboard e veja os resultados aparecerem.</p>
+                    </div>
+                    <div class="step-icon">🚀</div>
+                </div>
+            </div>
+            <div class="app-preview">
+                <img src="images/app_mockup.png" alt="App Dashboard Preview" class="app-mockup">
+                <div class="app-features">
+                    <div class="app-feature">
+                        <span class="feature-icon">📊</span>
+                        <span>Acompanhamento em tempo real</span>
+                    </div>
+                    <div class="app-feature">
+                        <span class="feature-icon">📸</span>
+                        <span>Upload de fotos de refeições</span>
+                    </div>
+                    <div class="app-feature">
+                        <span class="feature-icon">🤖</span>
+                        <span>Gerador de receitas com IA</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Food Gallery Section -->
+    <section class="food-gallery">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Alimentação de Verdade</span>
+                <h2 class="section-title">Comida que <span class="gradient-text">Nutre</span></h2>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item large">
+                    <img src="images/superfoods_collection.png" alt="Superalimentos da Selva">
+                    <div class="gallery-overlay">
+                        <span>Superalimentos Naturais</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="images/healthy_food_plate.png" alt="Prato saudável">
+                    <div class="gallery-overlay">
+                        <span>Refeições Completas</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="images/jungle_hero_bg.png" alt="Natureza">
+                    <div class="gallery-overlay">
+                        <span>Direto da Natureza</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recipe Generator Preview -->
+    <section class="recipe-section" id="receitas">
+        <div class="container">
+            <div class="recipe-content">
+                <div class="recipe-info">
+                    <span class="section-badge">Exclusivo</span>
+                    <h2 class="section-title">Gerador de Receitas <span class="gradient-text">Inteligente</span></h2>
+                    <p class="section-subtitle">
+                        Envie uma foto dos ingredientes que você tem em casa e nossa IA cria
+                        receitas deliciosas e 100% compatíveis com o Protocolo Selva.
+                    </p>
+                    <ul class="recipe-features">
+                        <li><span>✓</span> Reconhecimento de ingredientes por foto</li>
+                        <li><span>✓</span> +500 receitas exclusivas</li>
+                        <li><span>✓</span> Valores nutricionais calculados</li>
+                        <li><span>✓</span> Adaptação às suas preferências</li>
+                        <li><span>✓</span> Modo rápido para refeições em 15min</li>
+                    </ul>
+                    <button class="btn-primary btn-large" onclick="openModal('registerModal')">
+                        Experimentar Grátis
+                    </button>
+                </div>
+                <div class="recipe-demo">
+                    <div class="demo-card">
+                        <div class="demo-header">
+                            <span class="demo-title">🤖 Gerador de Receitas IA</span>
+                        </div>
+                        <div class="demo-upload">
+                            <div class="upload-area">
+                                <span class="upload-icon">📸</span>
+                                <span class="upload-text">Arraste uma foto ou clique para enviar</span>
+                            </div>
+                        </div>
+                        <div class="demo-result">
+                            <div class="result-header">
+                                <span>Receita Sugerida:</span>
+                            </div>
+                            <div class="result-content">
+                                <h4>🥩 Bife de Picanha com Legumes Grelhados</h4>
+                                <p>Tempo: 25min | Calorias: 450kcal | Proteína: 45g</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="depoimentos">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Resultados Reais</span>
+                <h2 class="section-title">O que dizem nossos <span class="gradient-text">Guerreiros</span></h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Perdi 12kg em 2 meses sem passar fome. A energia que tenho hoje é
+                        incomparável. O Protocolo Selva mudou minha vida!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MR</div>
+                        <div class="author-info">
+                            <span class="author-name">Marcos Rodrigues</span>
+                            <span class="author-role">Empresário, 38 anos</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-result">-12kg em 60 dias</div>
+                </div>
+                <div class="testimonial-card featured">
+                    <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"O gerador de receitas é incrível! Nunca pensei que comer saudável
+                        pudesse ser tão prático e gostoso. Recomendo demais!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">AS</div>
+                        <div class="author-info">
+                            <span class="author-name">Ana Silva</span>
+                            <span class="author-role">Médica, 42 anos</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-result">-8kg em 45 dias</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Finalmente uma dieta que faz sentido. Sem contar calorias, sem passar
+                        fome. Só resultados!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">PL</div>
+                        <div class="author-info">
+                            <span class="author-name">Pedro Lima</span>
+                            <span class="author-role">Personal Trainer, 29 anos</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-result">+5kg de massa muscular</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="preco">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Invista em Você</span>
+                <h2 class="section-title">Planos para sua <span class="gradient-text">Transformação</span></h2>
+                <p class="section-subtitle">Escolha o plano ideal para seus objetivos</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Iniciante</h3>
+                        <p>Para quem quer começar</p>
+                    </div>
+                    <div class="pricing-price">
+                        <span class="currency">R$</span>
+                        <span class="amount">47</span>
+                        <span class="period">/mês</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><span>✓</span> Acesso ao Dashboard</li>
+                        <li><span>✓</span> 50 Receitas Exclusivas</li>
+                        <li><span>✓</span> Acompanhamento básico</li>
+                        <li><span>✓</span> Suporte por email</li>
+                        <li class="disabled"><span>✗</span> Gerador de Receitas IA</li>
+                        <li class="disabled"><span>✗</span> Consulta com nutricionista</li>
+                    </ul>
+                    <button class="btn-ghost btn-full" onclick="openModal('registerModal')">Começar Agora</button>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">Mais Popular</div>
+                    <div class="pricing-header">
+                        <h3>Guerreiro</h3>
+                        <p>Para resultados sérios</p>
+                    </div>
+                    <div class="pricing-price">
+                        <span class="currency">R$</span>
+                        <span class="amount">97</span>
+                        <span class="period">/mês</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><span>✓</span> Tudo do plano Iniciante</li>
+                        <li><span>✓</span> +500 Receitas Exclusivas</li>
+                        <li><span>✓</span> Gerador de Receitas IA</li>
+                        <li><span>✓</span> Upload de fotos ilimitado</li>
+                        <li><span>✓</span> Acompanhamento completo</li>
+                        <li><span>✓</span> Suporte prioritário</li>
+                    </ul>
+                    <button class="btn-primary btn-full" onclick="openModal('registerModal')">Escolher
+                        Guerreiro</button>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Predador</h3>
+                        <p>Transformação total</p>
+                    </div>
+                    <div class="pricing-price">
+                        <span class="currency">R$</span>
+                        <span class="amount">197</span>
+                        <span class="period">/mês</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><span>✓</span> Tudo do plano Guerreiro</li>
+                        <li><span>✓</span> Consulta mensal com nutricionista</li>
+                        <li><span>✓</span> Plano 100% personalizado</li>
+                        <li><span>✓</span> Grupo VIP exclusivo</li>
+                        <li><span>✓</span> Suporte via WhatsApp 24h</li>
+                        <li><span>✓</span> Garantia de resultados</li>
+                    </ul>
+                    <button class="btn-ghost btn-full" onclick="openModal('registerModal')">Virar Predador</button>
+                </div>
+            </div>
+            <div class="guarantee">
+                <div class="guarantee-icon">🛡️</div>
+                <div class="guarantee-content">
+                    <h4>Garantia de 7 Dias</h4>
+                    <p>Se não gostar, devolvemos 100% do seu dinheiro. Sem perguntas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Dúvidas Frequentes</span>
+                <h2 class="section-title">Perguntas <span class="gradient-text">Respondidas</span></h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>O que é a Dieta da Selva?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>A Dieta da Selva é uma abordagem alimentar baseada nos princípios ancestrais de alimentação
+                            humana. Focamos em alimentos naturais, não processados, ricos em proteínas de qualidade,
+                            gorduras saudáveis e vegetais. É uma forma de comer como nossos ancestrais, adaptada à vida
+                            moderna.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>Vou passar fome?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Não! A Dieta da Selva é rica em proteínas e gorduras saudáveis que promovem saciedade. Você
+                            vai comer até ficar satisfeito, sem contar calorias obsessivamente. A maioria das pessoas
+                            relata nunca ter se sentido tão satisfeita com uma dieta.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>Como funciona o gerador de receitas?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Você envia uma foto dos ingredientes que tem disponíveis e nossa inteligência artificial
+                            reconhece cada item e sugere receitas deliciosas 100% compatíveis com o Protocolo Selva. É
+                            prático, rápido e elimina a dúvida de "o que vou comer hoje".</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>Posso cancelar a qualquer momento?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Sim! Não temos fidelidade ou multa. Você pode cancelar sua assinatura quando quiser,
+                            diretamente pelo seu dashboard. Além disso, oferecemos garantia total de 7 dias - se não
+                            gostar, devolvemos seu dinheiro.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Pronto para despertar o <span class="gradient-text">Predador</span> em você?</h2>
+                <p>Junte-se a mais de 2.500 pessoas que já transformaram suas vidas com o Protocolo Selva.</p>
+                <button class="btn-primary btn-large pulse-animation" onclick="openModal('registerModal')">
+                    🌿 Começar Minha Transformação
+                </button>
+                <span class="cta-note">Cancele quando quiser • Garantia de 7 dias</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <span class="logo-icon">🌿</span>
+                        <span class="logo-text">Protocolo<span class="highlight">Selva</span></span>
+                    </a>
+                    <p>A dieta ancestral que transforma seu corpo e sua vida.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">📘</a>
+                        <a href="#" class="social-link">📸</a>
+                        <a href="#" class="social-link">🎵</a>
+                        <a href="#" class="social-link">▶️</a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="#beneficios">Benefícios</a></li>
+                        <li><a href="#como-funciona">Como Funciona</a></li>
+                        <li><a href="#receitas">Receitas</a></li>
+                        <li><a href="#preco">Preços</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Suporte</h4>
+                    <ul>
+                        <li><a href="#">Central de Ajuda</a></li>
+                        <li><a href="#">Contato</a></li>
+                        <li><a href="#">Termos de Uso</a></li>
+                        <li><a href="#">Privacidade</a></li>
+                    </ul>
+                </div>
+                <div class="footer-newsletter">
+                    <h4>Receba Dicas Exclusivas</h4>
+                    <p>Inscreva-se para receber receitas e dicas grátis.</p>
+                    <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                        <input type="email" placeholder="Seu melhor email" required>
+                        <button type="submit" class="btn-primary">Inscrever</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Protocolo Selva. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-overlay" onclick="closeModal('loginModal')"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+            <div class="modal-header">
+                <span class="modal-icon">🌿</span>
+                <h2>Bem-vindo de volta!</h2>
+                <p>Entre na sua conta para acessar seu dashboard</p>
+            </div>
+            <form class="auth-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Senha</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary btn-full">Entrar</button>
+            </form>
+            <div class="modal-footer">
+                <p>Não tem conta? <a href="#" onclick="switchModal('loginModal', 'registerModal')">Cadastre-se
+                        grátis</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-overlay" onclick="closeModal('registerModal')"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('registerModal')">&times;</button>
+            <div class="modal-header">
+                <span class="modal-icon">🌿</span>
+                <h2>Comece sua transformação</h2>
+                <p>Crie sua conta gratuitamente</p>
+            </div>
+            <form class="auth-form" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="registerName">Nome completo</label>
+                    <input type="text" id="registerName" placeholder="Seu nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Senha</label>
+                    <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres" required
+                        minlength="6">
+                </div>
+                <button type="submit" class="btn-primary btn-full">Criar Conta Grátis</button>
+            </form>
+            <div class="modal-footer">
+                <p>Já tem conta? <a href="#" onclick="switchModal('registerModal', 'loginModal')">Faça login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span class="toast-icon">✓</span>
+        <span class="toast-message" id="toastMessage">Mensagem aqui</span>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

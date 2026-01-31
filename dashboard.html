@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dashboard Protocolo Selva - Acompanhe seu progresso na dieta ancestral">
+    <title>Dashboard | Protocolo Selva</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🌿</span>
+                <span class="logo-text">Protocolo<span class="highlight">Selva</span></span>
+            </a>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-section="overview">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Visão Geral</span>
+            </a>
+            <a href="#" class="nav-item" data-section="recipes">
+                <span class="nav-icon">🍳</span>
+                <span class="nav-text">Gerador de Receitas</span>
+            </a>
+            <a href="#" class="nav-item" data-section="meals">
+                <span class="nav-icon">📸</span>
+                <span class="nav-text">Minhas Refeições</span>
+            </a>
+            <a href="#" class="nav-item" data-section="progress">
+                <span class="nav-icon">📈</span>
+                <span class="nav-text">Meu Progresso</span>
+            </a>
+            <a href="#" class="nav-item" data-section="profile">
+                <span class="nav-icon">👤</span>
+                <span class="nav-text">Meu Perfil</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="logout()">
+                <span>🚪</span>
+                <span>Sair</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h1 id="pageTitle">Visão Geral</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span class="greeting" id="userGreeting">Olá, Guerreiro!</span>
+                    <div class="user-avatar" id="userAvatar">GS</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Sections -->
+        <div class="dashboard-content">
+            <!-- Overview Section -->
+            <section class="section active" id="section-overview">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🔥</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statDays">0</span>
+                            <span class="stat-label">Dias no Protocolo</span>
+                        </div>
+                    </div>
+                    <div class="stat-card accent">
+                        <div class="stat-icon">📸</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statMeals">0</span>
+                            <span class="stat-label">Refeições Registradas</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🍳</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statRecipes">0</span>
+                            <span class="stat-label">Receitas Geradas</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statStreak">0</span>
+                            <span class="stat-label">Sequência Atual</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="card quick-actions">
+                        <h3>Ações Rápidas</h3>
+                        <div class="actions-grid">
+                            <button class="action-btn" onclick="switchSection('recipes')">
+                                <span class="action-icon">🤖</span>
+                                <span>Gerar Receita</span>
+                            </button>
+                            <button class="action-btn" onclick="switchSection('meals')">
+                                <span class="action-icon">📸</span>
+                                <span>Registrar Refeição</span>
+                            </button>
+                            <button class="action-btn" onclick="switchSection('progress')">
+                                <span class="action-icon">📊</span>
+                                <span>Ver Progresso</span>
+                            </button>
+                            <button class="action-btn" onclick="switchSection('profile')">
+                                <span class="action-icon">⚙️</span>
+                                <span>Editar Perfil</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card today-plan">
+                        <h3>Dica do Dia 🌿</h3>
+                        <div class="tip-card">
+                            <p id="dailyTip">Carregando dica...</p>
+                        </div>
+                    </div>
+
+                    <div class="card recent-meals">
+                        <h3>Últimas Refeições</h3>
+                        <div class="meals-list" id="recentMealsList">
+                            <div class="empty-state">
+                                <span class="empty-icon">📸</span>
+                                <p>Nenhuma refeição registrada ainda</p>
+                                <button class="btn-primary btn-small" onclick="switchSection('meals')">
+                                    Registrar Primeira Refeição
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card saved-recipes">
+                        <h3>Receitas Favoritas</h3>
+                        <div class="recipes-list" id="savedRecipesList">
+                            <div class="empty-state">
+                                <span class="empty-icon">🍳</span>
+                                <p>Nenhuma receita salva ainda</p>
+                                <button class="btn-primary btn-small" onclick="switchSection('recipes')">
+                                    Gerar Primeira Receita
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recipe Generator Section -->
+            <section class="section" id="section-recipes">
+                <div class="recipe-generator">
+                    <div class="generator-header">
+                        <h2>🤖 Gerador de Receitas com IA</h2>
+                        <p>Envie uma foto dos seus ingredientes ou descreva o que você tem disponível</p>
+                    </div>
+
+                    <div class="generator-content">
+                        <div class="input-methods">
+                            <div class="method-tabs">
+                                <button class="method-tab active" data-method="photo">
+                                    <span>📸</span> Enviar Foto
+                                </button>
+                                <button class="method-tab" data-method="text">
+                                    <span>✍️</span> Descrever Ingredientes
+                                </button>
+                            </div>
+
+                            <div class="method-content" id="method-photo">
+                                <div class="photo-upload" id="photoUpload">
+                                    <input type="file" id="ingredientPhoto" accept="image/*" hidden>
+                                    <div class="upload-placeholder"
+                                        onclick="document.getElementById('ingredientPhoto').click()">
+                                        <span class="upload-icon">📷</span>
+                                        <p>Clique ou arraste uma foto dos ingredientes</p>
+                                        <span class="upload-hint">JPG, PNG até 10MB</span>
+                                    </div>
+                                    <div class="upload-preview" id="uploadPreview" style="display: none;">
+                                        <img id="previewImage" src="" alt="Preview">
+                                        <button class="remove-photo" onclick="removePhoto()">✕</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="method-content" id="method-text" style="display: none;">
+                                <textarea id="ingredientText"
+                                    placeholder="Ex: Tenho frango, brócolis, ovos e azeite de oliva..."></textarea>
+                            </div>
+
+                            <div class="generator-options">
+                                <div class="option-group">
+                                    <label>Tipo de Refeição</label>
+                                    <select id="mealType">
+                                        <option value="any">Qualquer</option>
+                                        <option value="breakfast">Café da Manhã</option>
+                                        <option value="lunch">Almoço</option>
+                                        <option value="dinner">Jantar</option>
+                                        <option value="snack">Lanche</option>
+                                    </select>
+                                </div>
+                                <div class="option-group">
+                                    <label>Tempo Disponível</label>
+                                    <select id="cookTime">
+                                        <option value="any">Qualquer</option>
+                                        <option value="15">Até 15 minutos</option>
+                                        <option value="30">Até 30 minutos</option>
+                                        <option value="60">Até 1 hora</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button class="btn-primary btn-large btn-full" onclick="generateRecipe()">
+                                <span>🌿</span> Gerar Receita Selva
+                            </button>
+                        </div>
+
+                        <div class="generated-recipe" id="generatedRecipe" style="display: none;">
+                            <div class="recipe-card">
+                                <div class="recipe-header">
+                                    <h3 id="recipeName">Nome da Receita</h3>
+                                    <button class="save-recipe-btn" onclick="saveCurrentRecipe()">
+                                        <span>💾</span> Salvar
+                                    </button>
+                                </div>
+                                <div class="recipe-meta">
+                                    <span><span class="meta-icon">⏱️</span> <span id="recipeTime">30min</span></span>
+                                    <span><span class="meta-icon">🔥</span> <span
+                                            id="recipeCalories">450kcal</span></span>
+                                    <span><span class="meta-icon">🥩</span> <span id="recipeProtein">45g
+                                            proteína</span></span>
+                                </div>
+                                <div class="recipe-section">
+                                    <h4>🥘 Ingredientes</h4>
+                                    <ul id="recipeIngredients"></ul>
+                                </div>
+                                <div class="recipe-section">
+                                    <h4>👨‍🍳 Modo de Preparo</h4>
+                                    <ol id="recipeSteps"></ol>
+                                </div>
+                                <div class="recipe-tips">
+                                    <h4>💡 Dica Selva</h4>
+                                    <p id="recipeTip">Dica especial aqui</p>
+                                </div>
+                            </div>
+                            <button class="btn-ghost btn-full" onclick="resetGenerator()">
+                                Gerar Outra Receita
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Meals Section -->
+            <section class="section" id="section-meals">
+                <div class="meals-header">
+                    <h2>📸 Minhas Refeições</h2>
+                    <button class="btn-primary" onclick="openMealModal()">
+                        <span>+</span> Registrar Refeição
+                    </button>
+                </div>
+
+                <div class="meals-filter">
+                    <button class="filter-btn active" data-filter="all">Todas</button>
+                    <button class="filter-btn" data-filter="breakfast">Café</button>
+                    <button class="filter-btn" data-filter="lunch">Almoço</button>
+                    <button class="filter-btn" data-filter="dinner">Jantar</button>
+                    <button class="filter-btn" data-filter="snack">Lanche</button>
+                </div>
+
+                <div class="meals-grid" id="mealsGrid">
+                    <div class="empty-state full">
+                        <span class="empty-icon">📸</span>
+                        <h3>Nenhuma refeição registrada</h3>
+                        <p>Comece a registrar suas refeições para acompanhar seu progresso!</p>
+                        <button class="btn-primary" onclick="openMealModal()">
+                            Registrar Primeira Refeição
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Progress Section -->
+            <section class="section" id="section-progress">
+                <div class="progress-header">
+                    <h2>📈 Meu Progresso</h2>
+                    <button class="btn-primary" onclick="openProgressModal()">
+                        <span>+</span> Registrar Peso
+                    </button>
+                </div>
+
+                <div class="progress-stats">
+                    <div class="progress-card">
+                        <span class="progress-label">Peso Inicial</span>
+                        <span class="progress-value" id="startWeight">--</span>
+                        <span class="progress-unit">kg</span>
+                    </div>
+                    <div class="progress-card accent">
+                        <span class="progress-label">Peso Atual</span>
+                        <span class="progress-value" id="currentWeight">--</span>
+                        <span class="progress-unit">kg</span>
+                    </div>
+                    <div class="progress-card">
+                        <span class="progress-label">Total Perdido</span>
+                        <span class="progress-value" id="totalLost">--</span>
+                        <span class="progress-unit">kg</span>
+                    </div>
+                    <div class="progress-card">
+                        <span class="progress-label">Meta</span>
+                        <span class="progress-value" id="goalWeight">--</span>
+                        <span class="progress-unit">kg</span>
+                    </div>
+                </div>
+
+                <div class="progress-chart-container">
+                    <div class="chart-card">
+                        <h3>Evolução do Peso</h3>
+                        <div class="chart-area" id="weightChart">
+                            <div class="empty-state">
+                                <span class="empty-icon">📊</span>
+                                <p>Registre seu peso para ver o gráfico</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-history">
+                    <h3>Histórico de Registros</h3>
+                    <div class="history-list" id="progressHistory">
+                        <div class="empty-state">
+                            <p>Nenhum registro de peso ainda</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section class="section" id="section-profile">
+                <div class="profile-container">
+                    <div class="profile-header-card">
+                        <div class="profile-avatar" id="profileAvatar">GS</div>
+                        <div class="profile-info">
+                            <h2 id="profileName">Nome do Usuário</h2>
+                            <p id="profileEmail">email@exemplo.com</p>
+                            <span class="profile-badge">🌿 Guerreiro Selva</span>
+                        </div>
+                    </div>
+
+                    <form class="profile-form" id="profileForm" onsubmit="saveProfile(event)">
+                        <div class="form-section">
+                            <h3>Informações Pessoais</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="profileNameInput">Nome Completo</label>
+                                    <input type="text" id="profileNameInput" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileEmailInput">Email</label>
+                                    <input type="email" id="profileEmailInput" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Dados Físicos</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="profileWeight">Peso Atual (kg)</label>
+                                    <input type="number" id="profileWeight" step="0.1" min="30" max="300">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileHeight">Altura (cm)</label>
+                                    <input type="number" id="profileHeight" min="100" max="250">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileGoal">Objetivo</label>
+                                    <select id="profileGoal">
+                                        <option value="lose">Perder Peso</option>
+                                        <option value="maintain">Manter Peso</option>
+                                        <option value="gain">Ganhar Massa</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileGoalWeight">Peso Meta (kg)</label>
+                                    <input type="number" id="profileGoalWeight" step="0.1" min="30" max="200">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Preferências Alimentares</h3>
+                            <div class="preferences-grid">
+                                <label class="preference-item">
+                                    <input type="checkbox" id="prefBeef" checked>
+                                    <span>🥩 Carne Bovina</span>
+                                </label>
+                                <label class="preference-item">
+                                    <input type="checkbox" id="prefChicken" checked>
+                                    <span>🍗 Frango</span>
+                                </label>
+                                <label class="preference-item">
+                                    <input type="checkbox" id="prefFish" checked>
+                                    <span>🐟 Peixe</span>
+                                </label>
+                                <label class="preference-item">
+                                    <input type="checkbox" id="prefEggs" checked>
+                                    <span>🥚 Ovos</span>
+                                </label>
+                                <label class="preference-item">
+                                    <input type="checkbox" id="prefDairy">
+                                    <span>🧀 Laticínios</span>
+                                </label>
+                                <label class="preference-item">
+                                    <input type="checkbox" id="prefNuts" checked>
+                                    <span>🥜 Oleaginosas</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary btn-large">
+                            💾 Salvar Alterações
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Meal Modal -->
+    <div class="modal" id="mealModal">
+        <div class="modal-overlay" onclick="closeMealModal()"></div>
+        <div class="modal-content modal-large">
+            <button class="modal-close" onclick="closeMealModal()">&times;</button>
+            <div class="modal-header">
+                <span class="modal-icon">📸</span>
+                <h2>Registrar Refeição</h2>
+                <p>Adicione uma foto e detalhes da sua refeição</p>
+            </div>
+            <form class="meal-form" onsubmit="saveMeal(event)">
+                <div class="meal-photo-upload">
+                    <input type="file" id="mealPhoto" accept="image/*" hidden>
+                    <div class="upload-area" onclick="document.getElementById('mealPhoto').click()">
+                        <span class="upload-icon">📷</span>
+                        <p>Adicionar foto da refeição</p>
+                    </div>
+                    <div class="meal-preview" id="mealPreview" style="display: none;">
+                        <img id="mealPreviewImage" src="" alt="Preview">
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="mealName">Nome da Refeição</label>
+                        <input type="text" id="mealName" placeholder="Ex: Omelete com bacon" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mealTypeSelect">Tipo</label>
+                        <select id="mealTypeSelect" required>
+                            <option value="breakfast">Café da Manhã</option>
+                            <option value="lunch">Almoço</option>
+                            <option value="dinner">Jantar</option>
+                            <option value="snack">Lanche</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="mealDescription">Descrição (opcional)</label>
+                    <textarea id="mealDescription"
+                        placeholder="Descreva os ingredientes ou como preparou..."></textarea>
+                </div>
+                <button type="submit" class="btn-primary btn-full">Salvar Refeição</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Progress Modal -->
+    <div class="modal" id="progressModal">
+        <div class="modal-overlay" onclick="closeProgressModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProgressModal()">&times;</button>
+            <div class="modal-header">
+                <span class="modal-icon">📊</span>
+                <h2>Registrar Peso</h2>
+                <p>Acompanhe sua evolução</p>
+            </div>
+            <form class="progress-form" onsubmit="saveProgress(event)">
+                <div class="form-group">
+                    <label for="progressWeight">Peso Atual (kg)</label>
+                    <input type="number" id="progressWeight" step="0.1" min="30" max="300" required>
+                </div>
+                <div class="form-group">
+                    <label for="progressDate">Data</label>
+                    <input type="date" id="progressDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="progressNotes">Observações (opcional)</label>
+                    <textarea id="progressNotes" placeholder="Como você está se sentindo?"></textarea>
+                </div>
+                <button type="submit" class="btn-primary btn-full">Salvar Registro</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span class="toast-icon">✓</span>
+        <span class="toast-message" id="toastMessage">Mensagem</span>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+
+</html>
