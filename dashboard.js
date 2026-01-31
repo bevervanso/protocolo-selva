@@ -1231,6 +1231,11 @@ function getUserProfile() {
     const user = getDashboardUser();
     if (!user) return null;
 
+    // Se o usuário já veio da API com o perfil completo e quiz concluído, priorizar isso
+    if (user.profile && (user.profile.quizCompleted === true || user.profile.quiz_completed === 1)) {
+        return user.profile;
+    }
+
     const appData = getAppData();
     if (!appData.userProfiles) appData.userProfiles = {};
 
@@ -1685,7 +1690,7 @@ function getBmiCategory(bmi) {
 }
 
 // Completar quiz e salvar perfil
-function completeQuiz() {
+async function completeQuiz() {
     // Montar perfil completo
     const profile = {
         quizCompleted: true,
@@ -1711,8 +1716,24 @@ function completeQuiz() {
         routine: quizData.routine
     };
 
-    // Salvar perfil
+    // Salvar perfil localmente
     saveUserProfile(profile);
+
+    // Tentar salvar no servidor se autenticado via API
+    if (typeof ProfileAPI !== 'undefined' && typeof AuthAPI !== 'undefined' && AuthAPI.isAuthenticated()) {
+        try {
+            await ProfileAPI.update({
+                weight: profile.weight,
+                height: profile.height,
+                goal: profile.goal,
+                goalWeight: profile.goalWeight,
+                quizCompleted: true
+            });
+            console.log('✅ Perfil sincronizado com o servidor');
+        } catch (e) {
+            console.error('❌ Erro ao sincronizar perfil:', e.message);
+        }
+    }
 
     // Atualizar dados do usuário no localStorage também
     const user = getDashboardUser();

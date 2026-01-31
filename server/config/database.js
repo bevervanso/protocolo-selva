@@ -69,11 +69,19 @@ db.run(`
     height REAL,
     goal TEXT DEFAULT 'lose',
     goal_weight REAL,
+    quiz_completed INTEGER DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
   )
 `);
+
+// Garantir que a coluna quiz_completed existirá em versões anteriores do DB
+try {
+  db.run("ALTER TABLE profiles ADD COLUMN quiz_completed INTEGER DEFAULT 0");
+} catch (e) {
+  // Ignora erro se a coluna já existir
+}
 
 db.run(`
   CREATE TABLE IF NOT EXISTS meals (

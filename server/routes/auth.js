@@ -138,7 +138,7 @@ router.get('/me', authenticateToken, (req, res) => {
     try {
         const user = db.prepare(`
       SELECT u.id, u.name, u.email, u.created_at,
-             p.weight, p.height, p.goal, p.goal_weight
+             p.weight, p.height, p.goal, p.goal_weight, p.quiz_completed
       FROM users u
       LEFT JOIN profiles p ON u.id = p.user_id
       WHERE u.id = ?
@@ -162,7 +162,8 @@ router.get('/me', authenticateToken, (req, res) => {
                     weight: user.weight,
                     height: user.height,
                     goal: user.goal,
-                    goalWeight: user.goal_weight
+                    goalWeight: user.goal_weight,
+                    quizCompleted: !!user.quiz_completed
                 }
             }
         });
