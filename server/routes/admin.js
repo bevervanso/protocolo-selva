@@ -9,7 +9,8 @@ const router = express.Router();
 // ============================================
 router.get('/users', authenticateToken, isAdmin, (req, res) => {
     try {
-        console.log('Admin Panel: Fetching users...');
+        console.log('[AdminAPI] Início da listagem de usuários');
+
         const users = db.prepare(`
             SELECT u.id, u.name, u.email, u.role, u.created_at,
                    p.weight, p.height, p.goal, p.quiz_completed
@@ -17,27 +18,38 @@ router.get('/users', authenticateToken, isAdmin, (req, res) => {
             LEFT JOIN profiles p ON u.id = p.user_id
             ORDER BY u.created_at DESC
         `).all();
-        console.log(`Admin Panel: Found ${users.length} users`);
+
+        console.log(`[AdminAPI] Consulta concluída. Usuários encontrados: ${users ? users.length : 0}`);
+
+        if (!users) {
+            return res.json({ success: true, users: [] });
+        }
+
+        const formattedUsers = users.map(u => ({
+            id: u.id,
+            name: u.name || 'Sem Nome',
+            email: u.email || 'Sem Email',
+            role: u.role || 'user',
+            createdAt: u.created_at || new Date().toISOString(),
+            profile: {
+                weight: u.weight || null,
+                height: u.height || null,
+                goal: u.goal || 'lose',
+                quizCompleted: !!u.quiz_completed
+            }
+        }));
 
         res.json({
             success: true,
-            users: users.map(u => ({
-                id: u.id,
-                name: u.name,
-                email: u.email,
-                role: u.role,
-                createdAt: u.created_at,
-                profile: {
-                    weight: u.weight,
-                    height: u.height,
-                    goal: u.goal,
-                    quizCompleted: !!u.quiz_completed
-                }
-            }))
+            users: formattedUsers
         });
     } catch (error) {
-        console.error('List users error:', error);
-        res.status(500).json({ success: false, message: 'Erro ao listar usuários' });
+        console.error('[AdminAPI] Erro Fatal na Rota /users:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Erro interno ao carregar a lista de usuários',
+            error: error.message
+        });
     }
 });
 
@@ -94,23 +106,33 @@ router.patch('/users/:id/role', authenticateToken, isAdmin, (req, res) => {
 // ============================================
 router.get('/stats', authenticateToken, isAdmin, (req, res) => {
     try {
-        const totalUsers = db.prepare('SELECT COUNT(*) as count FROM users').get().count;
-        const totalMeals = db.prepare('SELECT COUNT(*) as count FROM meals').get().count;
-        const totalRecipes = db.prepare('SELECT COUNT(*) as count FROM recipes').get().count;
-        const newUsersToday = db.prepare("SELECT COUNT(*) as count FROM users WHERE date(created_at) = date('now')").get().count;
+        console.log('[AdminAPI] Calculando estatísticas');
+
+        const countUsers = db.prepare('SELECT COUNT(*) as count FROM users').get();
+        const countMeals = db.prepare('SELECT COUNT(*) as count FROM meals').get();
+        const countRecipes = db.prepare('SELECT COUNT(*) as count FROM recipes').get();
+        const countNewToday = db.prepare("SELECT COUNT(*) as count FROM users WHERE date(created_at) = date('now')").get();
+
+        const stats = {
+            totalUsers: countUsers ? countUsers.count : 0,
+            totalMeals: countMeals ? countMeals.count : 0,
+            totalRecipes: countRecipes ? countRecipes.count : 0,
+            newUsersToday: countNewToday ? countNewToday.count : 0
+        };
+
+        console.log('[AdminAPI] Estatísticas calculadas:', stats);
 
         res.json({
             success: true,
-            stats: {
-                totalUsers,
-                totalMeals,
-                totalRecipes,
-                newUsersToday
-            }
+            stats
         });
     } catch (error) {
-        console.error('Admin stats error:', error);
-        res.status(500).json({ success: false, message: 'Erro ao obter estatísticas' });
+        console.error('[AdminAPI] Erro Fatal na Rota /stats:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Erro interno ao calcular estatísticas',
+            error: error.message
+        });
     }
 });
 
